@@ -1,0 +1,80 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notestyles}[2022/09/27 Kayzels Notes Styles]
+
+% Maths
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Lists
+\usepackage{enumitem}
+
+% Language Settings
+\RequirePackage[english]{babel}
+\setlocalecaption{english}{chapter}{Unit}
+
+% Bookmarks
+\usepackage[bookmarksnumbered]{hyperref}
+
+% Headers, Footers and Margins
+\RequirePackage[margin=2cm, vmargin=3cm]{geometry}
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}}
+\fancyhead[LO,RE]{\leftmark}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\parindent}{0cm}
+\RequirePackage{multicol}
+
+% Fonts
+\RequirePackage[T1]{fontenc}
+\RequirePackage{charter}
+\RequirePackage[varqu,varl]{inconsolata}
+\RequirePackage[type1]{cabin}
+\RequirePackage[xcharter]{newtxmath}
+\RequirePackage{bm}
+
+% Colors
+\RequirePackage[dvipsnames,table]{xcolor}
+\colorlet{process color}{MidnightBlue!25!white}
+\colorlet{program color}{red!30!white}
+
+% Include/Input Subfiles
+\RequirePackage{xstring}
+\RequirePackage{subfiles}
+\newcommand{\addfile}[2][include]
+	{\clearpage\begingroup\pagestyle{empty}\cleardoublepage\endgroup%
+	 \IfEqCase{#1}{%
+			{include}{\subfileinclude{#2}}%
+			{input}{\subfile{#2}}
+	 }[\PackageError{addfile}{Undefined option to addfile: #1}{}]%
+	}
+
+% Indented Paragraphs
+\RequirePackage{changepage}
+\newenvironment{indentparagraph}{\begin{adjustwidth}{2em}{}}{\end{adjustwidth}}
+
+% Images
+\RequirePackage{tikz}
+\usetikzlibrary{fit, backgrounds, topaths, arrows}
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=process color]
+\tikzstyle{open} = [rectangle, minimum height=1cm, text centered]
+\tikzstyle{program} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=program color]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+% Horizontal Rules at document ends
+\newcommand{\rulebookend}{\vbox{\hrule width \hsize \kern 1mm \hrule width \hsize height 2pt}%
+	\cfoot{}}
+\newcommand{\rulechapterend}{\noindent\rule{\textwidth}{0.4pt}%
+	\cfoot{}
+}
+
+% Questions, Concepts and Emphasis Styling
+\newcommand{\question}[1]{\textbf{#1}}
+\newcommand{\concept}[1]{\textbf{#1}}
+
+% TOC Page Number Spacing
+\makeatletter
+\renewcommand{\@pnumwidth}{1.75em} 
+\makeatother
