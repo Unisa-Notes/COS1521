@@ -1,0 +1,84 @@
+\documentclass[../notes.tex]{subfiles}
+
+\begin{document}
+	\chapter{Introduction}
+		A computer can be considered to be a \concept{data processor}. It accepts input data, processes the data, and creates output data.
+		\begin{center}
+			\begin{tikzpicture}[node distance=2cm]
+				\node (input) [open] {Input data};
+				\node (process) [process, right of=input, xshift=2cm] {Computer};
+				\node (output) [open, right of=process, xshift=2cm] {Output data};
+				\draw [arrow] (input) -- (process);
+				\draw [arrow] (process) -- (output);
+			\end{tikzpicture}
+		\end{center}
+		However, this is too general, and does not specify the type of processing. A computer today is a \concept{general purpose machine}, which means it can do many different tasks. This is opposed to a \concept{single purpose} machine, which only does one task.
+		\section{Turing Machine}
+			Alan Turing, in 1936, described the idea that all computing can be done by a special kind of machine. The idea is that the machine gets provided both \concept{input data} and a \concept{program}, and the output depends on both.
+			\begin{center}
+				\begin{tikzpicture}[node distance=2cm]
+					\node (input) [open] {Input data};
+					\node (process) [process, right of=input, xshift=2cm] {Computer};
+					\node (output) [open, right of=process, xshift=2cm] {Output data};
+					\node (program) [program, above of=process]{Program};
+					\draw [arrow] (input) -- (process);
+					\draw [arrow] (process) -- (output);
+					\draw [arrow] (program) -- (process);
+				\end{tikzpicture}
+			\end{center}
+			The \concept{Universal Turing Machine} is a machine that can do any computation given an appropriate program. Anything that is computable can be computed using this machine.
+		\pagebreak
+		\section{Von Neumann Model}
+			Around 1944--1945, John von Neumann expanded on the Universal Turing Machine. As the \concept{program data} and \concept{input data} are logically the same, the program should \empty{also} be stored in \textbf{computer memory}.
+			\subsection{Four Subsystems}
+				Computers based on this model divide computer hardware into $4$ subsystems:
+				\begin{description}
+					\item[Memory] The storage area. Where programs and data are stored during processing. 
+					\item[Arithmetic Logic Unit (ALU)] Where \concept{calculations and logical operations} take place.
+					\item[Control Unit] Controls the operation of the other three subsystems (how they should `communicate' with each other).
+					\item[Input/Output] Accept data from outside the computer and send results of processing the data to the outside world. 
+				\end{description}
+			\subsection{Stored Program}
+				A computer stores both the input data \emph{and} the program in memory, unlike earlier computers where the program was implemented externally.\\
+				The way this information is stored is in \concept{binary} patterns of memory.
+			\subsection{Sequential Execution}
+				Every program in this model contains a finite number of \concept{instructions}. Each instruction goes through the following:
+				\begin{enumerate}
+					\item fetch the instruction
+					\item decode the instruction
+					\item execute the instruction
+				\end{enumerate}
+				This happens sequentially --- each instruction is executed after the previous one. The instruction can be to jump to another section of the code, but this still occurs sequentially.
+		\pagebreak
+		\section{History}
+			\subsection{Mechanical Machines (before 1930)}
+				\begin{description}
+					\item[Blaise Pascal] invents \concept{Pascaline} in the \concept{17th century}. This is a mechanical calculator for addition and subtraction.
+					\item[Gotfried Leibniz] invents the \concept{Leibniz Wheel} in the \concept{late 17th century}. This is a mechanical calculator that can do addition, subtraction, multiplication and division.
+					\item[Joseph-Marie Jacquard] invents the \concept{Jacquard loom} in the \concept{early 19th century}. This is the \emph{first} machine to use the idea of storage and programming. It uses \concept{punched cards} to control threads in texture manufacturing.
+					\item[Charles Babbage] invents the \concept{Difference Engine} in \concept{1823}. This could perform simple arithmetic operations as well as polynomial equations. Later, he invented the \concept{Analytical Engine}, which parallels the idea of modern computers.
+					\item[Herman Hollerith] invents a machine for the \concept{US Census Bureau} in \concept{1890} that automatically reads, tallies and sorts data on punched cards.
+				\end{description}
+			\subsection{Birth of Electronic Computers (1930--1950)}
+				\subsubsection{Early Electronic Computers}
+					\begin{description}
+						\item[Atanasoff Berry Computer (ABC)] is the \emph{first} general-purpose computer that encodes information electrically. It was invented by \concept{John V. Atanasoff} and \concept{Clifford Berry} in \concept{1939}.
+						\item[Z1,] a general purpose machine, is invented by \concept{Konrad Zuse} at the same time.
+						\item[Mark I] is created at \concept{Harvard University} in the \concept{1930s}, sponsored by the \concept{US Navy} and \concept{IBM}, under the direction of \concept{Howard Aiken}. This computer uses electrical and mechanical components.
+						\item[Colossus] is invented by \concept{Alan Turing} to break the German Enigma code.
+						\item[ENIAC] (Electronic Numerical Integrator and Calculator), the \emph{first} totally electronic computer was made by \concept{John Mauchly} and \concept{J. Presper Eckert} 
+					\end{description}
+				\subsubsection{Von Neumann Model Computers}
+					The first computer based on this model was made in \concept{1950} at the \concept{University of Pennsylvania} called \concept{EDVAC}.\\
+					A similar compuer was built around the same time at \concept{Cambridge University} by \concept{Maurice Wilkes} called \concept{EDSAC}
+			\pagebreak
+			\subsection{Computer Generations}
+				\begin{description}
+					\item[First Generation] (roughly 1950--1959) Emergence of commercial computers.
+					\item[Second Generation] (roughly 1959--1965) Computer sizes reduced. \concept{FORTRAN} and \concept{COBOL}, two high-level programming languages, are developed.
+					\item[Third Generation] (roughly 1965--1975) \concept{Integrated circuits} developed, which reduces size and cose of computers. Minicomputers start appearing. Software industry is born.
+					\item[Fourth Generation] (roughly 1975--1985) \concept{Microcomputers} appear. First desktop calculator, \concept{Altair 8800} becomes available in 1975. Comuter system can fit on single circuit board. Computer networks appear.
+					\item[Fifth Generation] (1985--) Laptop and palmtop computers, secondary storae media, multimedia, and virtual reality.
+				\end{description}
+		\rulechapterend
+\end{document}
