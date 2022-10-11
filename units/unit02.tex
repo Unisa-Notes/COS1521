@@ -1,0 +1,284 @@
+\documentclass[../notes.tex]{subfiles}
+
+\begin{document}
+	\chapter{Number Systems}
+		A \concept{number system} defines how a number can be represented using distinct symbols.
+		\section{Positional Number Systems}
+			In a \concept{positional number system}, the position a symbol occupies in the number determins the value it represents.
+			\begin{description}
+				\item[Maximum Value] To calculate the highest possible value that a specific positional number system can have based on the number of digits $K$:
+				\begin{align*}
+					N_{\max} &= b^{K} - 1
+				\end{align*}
+			\end{description}
+			\subsection{Decimal System}
+				This system uses $10$ as a base. The possible symbols are $\{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$.\\
+				Therefore the number $234$ would be 
+				\begin{align*}
+					\bigl(234\bigr)_{10} &= \left(2 \times 10^{2}\right) + \left(3 \times 10^{1}\right) + \left(4\times 10^{0}\right)
+				\end{align*}
+				\subsubsection{Maximum Value}
+					Given the number of digits $K$
+					\begin{align*}
+						N_{\max} &= b^{K} - 1\\
+						&= 10^{K} - 1
+					\end{align*}
+					For example, suppose there are $3$ positions.
+					\begin{align*}
+						N_{\max} &= 10^{3} - 1\\
+						&= 1000 - 1\\
+						&= 999
+					\end{align*}
+					So the highest number that can be represented with $3$ positions is $(999)_{10}$.
+			\pagebreak
+			\subsection{Binary System}
+				This system uses $2$ as a base. The possible symbols are $\{0, 1\}$. The number $10101$ in decimal would be
+				\begin{align*}
+					\bigl(10101\bigr)_{2} &= \left(1 \times 2^{4}\right)_{10} + \left(0 \times 2^{3}\right)_{10} + \left(1 \times 2^{2}\right)_{10} + \left(0 \times 2^{1}\right)_{10} + \left(1 \times 2^{0}\right)_{10}\\
+					&= (16)_{10} + (0)_{10} + (4)_{10} + 0_{10} + (1)_{10}\\
+					&= (21)_{10}
+				\end{align*}
+				\subsubsection{Maximum Value}
+					Given the number of digits $K$
+					\begin{align*}
+						N_{\max} &= b^{K} - 1\\
+						&= 2^{K} - 1
+					\end{align*}
+					For example, suppose there are $5$ positions.
+					\begin{align*}
+						N_{\max} &= 2^{5} - 1\\
+						&= (32)_{10} - (1)_{10}\\
+						&= (31)_{10}
+					\end{align*}
+					So the highest number that can be represented with $5$ positions is $(31)_{10}$, which would be $(11111)_{2}$.
+				\subsubsection{Real Values}
+					If there is a fractional part to the number, say $10.01$, then the fractional part uses $2^{-k}$, where $k$ is the position.\\
+					For example:
+					\begin{align*}
+						\bigl(11.01\bigr)_{2} &= \left(1 \times 2^{1}\right)_{10} + \left(1 \times 2^{0}\right)_{10} + \left(0 \times 2^{-1}\right)_{10} + \left(1 \times 2^{-2}\right)_{10}\\
+						&= (2)_{10} + (1)_{10} + (0)_{10} + (0.25)_{10}\\
+						&= (3.25)_{10}
+					\end{align*}
+			\pagebreak
+			\subsection{Hexadecimal System}
+				This system uses $16$ as a base. The possible symbols are $\{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \mathrm{A}, \mathrm{B}, \mathrm{C}, \mathrm{D}, \mathrm{E}\}$.\\
+				Therefore the number $\mathrm{A}25\mathrm{C}$ would be
+				\begin{align*}
+					\bigl(\mathrm{A}25\mathrm{C}\bigr)_{16} &= \left(10 \times 16^{3}\right)_{10} + \left(2 \times 16^{2}\right)_{10} + \left(5 \times 16^{1}\right)_{10} + \left(12 \times 16^{0}\right)_{10}\\
+					&= (10 \times 4096)_{10} + (2 \times 256)_{10} + (5 \times 16)_{10} + (12 \times 1)_{10}\\
+					&= (40960)_{10} + (512)_{10} + (80)_{10} + (12)_{10}\\
+					&= 41564
+				\end{align*}
+				\subsubsection{Maximum Value}
+					Given the number of digits $K$
+					\begin{align*}
+						N_{\max} &= b^{K} - 1\\
+						&= 16^{K} - 1
+					\end{align*}
+					For example, suppose there are $2$ positions.
+					\begin{align*}
+						N_{\max} &= 16^{2} - 1\\
+						&= (256)_{10} - (1)_{10}\\
+						&= (255)_{10}
+					\end{align*}
+					So the highest number that can be represented with $2$ positions is $(255)_{10}$, which would be $(\mathrm{FF})_{16}$.
+				\subsubsection{Real Values}
+					If there is a fractional part to the number, say $\mathrm{A}12.3\mathrm{B}$, then the fractional part uses $2^{-k}$, where $k$ is the position.\\
+					For example:
+					\begin{align*}
+						\bigl(\mathrm{A}12.3\mathrm{B}\bigr)_{16} &= \left(10 \times 16^{2}\right)_{10} + \left(1 \times 16^{1}\right)_{10} + \left(2 \times 16^{0}\right)_{10} + \left(3 \times 16^{-1}\right)_{10} + \left(11 \times 16^{-2}\right)_{10}\\
+						&= (10 \times 256)_{10} + (1 \times 16)_{10} + (2 \times 1)_{10} + \left(3 \times \frac{1}{16}\right)_{10} + \left(11 \times \frac{1}{256}\right)_{10}\\
+						&= (2560)_{10} + (16)_{10} + (2)_{10} + \left(\frac{3}{16}\right)_{10} + \left(\frac{11}{256}\right)_{10}\\
+						&= (2578)_{10} + \left(\frac{59}{256}\right)_{10}\\
+						& \approx (2578.230)_{10}
+					\end{align*}
+			\pagebreak
+			\subsection{Octal System}
+				This system uses $8$ as a base. The possible symbols are $\{0, 1, 2, 3, 4, 5, 6, 7\}$.\\
+				Therefore the number $567$ would be
+				\begin{align*}
+					\bigl(567\bigr)_{8} &= \left(5 \times 8^{2}\right)_{10} + \left(6 \times 8^{1}\right)_{10} + \left(7 \times 8^{0}\right)_{10}\\
+					&= (5 \times 64)_{10} + (6 \times 8)_{10} + (7 \times 1)_{10}\\
+					&= (320)_{10} + (48)_{10} + (7)_{10}\\
+					&= (375)_{10}
+				\end{align*}
+				\subsubsection{Maximum Value}
+					Given the number of digits $K$
+					\begin{align*}
+						N_{\max} &= b^{K} - 1\\
+						&= 8^{K} - 1
+					\end{align*}
+					For example, suppose there are $4$ positions.
+					\begin{align*}
+						N_{\max} &= 8^{4} - 1\\
+						&= (4096)_{10} - (1)_{10}\\
+						&= (4095)_{10}
+					\end{align*}
+					So the highest number that can be represented with $4$ positions is $(4095)_{10}$, which would be $(7777)_{8}$.
+			\subsection{First 15 Numbers}
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{cccc}
+					\toprule
+					Decimal & Binary & Octal & Hexadecimal\\
+					\midrule
+					$01$ & $0001$ & $01$ & $1$\\
+					$02$ & $0010$ & $02$ & $2$\\
+					$03$ & $0011$ & $03$ & $3$\\
+					$04$ & $0100$ & $04$ & $4$\\
+					$05$ & $0101$ & $05$ & $5$\\
+					$06$ & $0110$ & $06$ & $6$\\
+					$07$ & $0111$ & $07$ & $7$\\
+					$08$ & $1000$ & $10$ & $8$\\
+					$09$ & $1001$ & $11$ & $9$\\
+					$10$ & $1010$ & $12$ & $\mathrm{A}$\\
+					$11$ & $1011$ & $13$ & $\mathrm{B}$\\
+					$12$ & $1100$ & $14$ & $\mathrm{C}$\\
+					$13$ & $1101$ & $15$ & $\mathrm{D}$\\
+					$14$ & $1110$ & $16$ & $\mathrm{E}$\\
+					$15$ & $1111$ & $17$ & $\mathrm{F}$\\
+					\bottomrule
+				\end{tabular}
+			\end{table}
+		\pagebreak
+		\section{Conversion}
+			\subsection{Any base to decimal}
+				Multiply each digit with its place value in the source system.\\
+				All the examples above are of this type.
+			\subsection{Decimal to any base}
+				Use repetitive division of the base, and the remainder. Fill in the numbers from right to left.
+				\begin{example}
+					Given the decimal number $25$, convert to binary.\\
+					Divide the top number by $2$ each time, and store the remainder below.
+					\begin{center}
+						\begin{tikzpicture}[node distance=1.5cm]
+							\node (start) [numstart] {$25$};
+							\node (num1) [numbox, left of=start] {$12$};
+							\node (rem1) [numbox, below of=start] {$1$};
+							\node (num2) [numbox, left of=num1] {$6$};
+							\node (rem2) [numbox, below of=num1] {$0$};
+							\node (num3) [numbox, left of=num2] {$3$};
+							\node (rem3) [numbox, below of=num2] {$0$};
+							\node (num4) [numbox, left of=num3] {$1$};
+							\node (rem4) [numbox, below of=num3] {$1$};
+							\node (num5) [numbox, left of=num4] {$0$};
+							\node (rem5) [numbox, below of=num4] {$1$};
+							\node (toplabel) [label, right of=start] {\textbf{Decimal}};
+							\node (bottomlabel) [label, right of=rem1] {\textbf{Binary}};
+							\draw [arrow] (start) -- (rem1);
+							\draw [arrow] (start) -- (num1);
+							\draw [arrow] (num1) -- (rem2);
+							\draw [arrow] (num2) -- (rem3);
+							\draw [arrow] (num3) -- (rem4);
+							\draw [arrow] (num4) -- (rem5);
+							\draw [arrow] (num1) -- (num2);
+							\draw [arrow] (num2) -- (num3);
+							\draw [arrow] (num3) -- (num4);
+							\draw [arrow] (num4) -- (num5);
+						\end{tikzpicture}
+					\end{center}
+					Therefore $(25)_{10}$ is $(11001)_{2}$.
+				\end{example}
+				\begin{example}
+					Given the decimal number $76$, convert to octal.\\
+					Divide the top number by $8$ each time, and store the remainder below.
+					\begin{center}
+						\begin{tikzpicture}[node distance=1.5cm]
+							\node (start) [numstart] {$76$};
+							\node (num1) [numbox, left of=start] {$9$};
+							\node (num2) [numbox, left of=num1] {$1$};
+							\node (num3) [numbox, left of=num2] {$0$};
+							\node (toplabel) [label, right of=start] {\textbf{Decimal}};
+							\node (rem1) [numbox, below of=start] {$4$};
+							\node (rem2) [numbox, below of=num1] {$1$};
+							\node (rem3) [numbox, below of=num2] {$1$};
+							\node (bottomlabel) [label, right of=rem1] {\textbf{Octal}};
+							\draw [arrow] (start) -- (num1);
+							\draw [arrow] (num1) -- (num2);
+							\draw [arrow] (num2) -- (num3);
+							\draw [arrow] (start) -- (rem1);
+							\draw [arrow] (num1) -- (rem2);
+							\draw [arrow] (num2) -- (rem3);
+						\end{tikzpicture}
+					\end{center}
+					Therefore $(76)_{10}$ is $(114)_{8}$.
+				\end{example}
+				\begin{example}
+					Given the decimal number $216$, convert to hexadecimal.\\
+					Divide the top number by $16$ each time, and store the remainder below.
+					\begin{center}
+						\begin{tikzpicture}[node distance=1.5cm]
+							\node (start) [numstart] {$216$};
+							\node (num1) [numbox, left of=start] {$13$};
+							\node (num2) [numbox, left of=num1] {$0$};
+							\node (toplabel) [label, right of=start, xshift=1cm] {\textbf{Decimal}};
+							\node (rem1) [numbox, below of=start] {$8$};
+							\node (rem2) [numbox, below of=num1] {$\mathrm{D}$};
+							\node (bottomlabel) [label, right of=rem1, xshift=1cm] {\textbf{Hexadecimal}};
+							\draw [arrow] (start) -- (num1);
+							\draw [arrow] (num1) -- (num2);
+							\draw [arrow] (start) -- (rem1);
+							\draw [arrow] (num1) -- (rem2);
+						\end{tikzpicture}
+					\end{center}
+					Therefore $(216)_{10}$ is $(\mathrm{D}8)_{16}$
+				\end{example}
+				\pagebreak
+				\subsubsection{Fractional Part}
+					Use repetitive multiplication of the base, and the remainder. Fill in the numbers from left to right.
+					\begin{example}
+						Given the decimal number $0.625$, convert to binary.\\
+						Multiply the number by $2$ each time, and store the integer part below.
+						\begin{center}
+							\begin{tikzpicture}[node distance=1.5cm]
+								\node (start) [numstart] {$0.625$};
+								\node (num1) [numbox, right of=start] {$0.25$};
+								\node (num2) [numbox, right of=num1] {$0.5$};
+								\node (num3) [numbox, right of=num2] {$0.0$};
+								\node (toplabel) [label, left of=start, xshift=-1cm] {\textbf{Decimal}};
+								\node (rem1) [numbox, below of=start] {$1$};
+								\node (rem2) [numbox, below of=num1] {$0$};
+								\node (rem3) [numbox, below of=num2] {$1$};
+								\node (bottomlabel) [label, left of=rem1, xshift=-1cm] {\textbf{Binary}};
+								\node (point) [label, left of=rem1, xshift=0.5cm] {$\bullet$};
+								\draw [arrow] (start) -- (num1);
+								\draw [arrow] (num1) -- (num2);
+								\draw [arrow] (num2) -- (num3);
+								\draw [arrow] (start) -- (rem1);
+								\draw [arrow] (num1) -- (rem2);
+								\draw [arrow] (num2) -- (rem3);
+							\end{tikzpicture}
+						\end{center}
+						Therefore $\bigl(0.625\bigr)_{10}$ is $\bigl(0.101\bigr)_{2}$
+					\end{example}
+					\begin{example}
+						Given the decimal number $0.634$, convert to octal, using a maximum of $4$ digits.\\
+						Multiply the number by $8$ each time, and store the integer part below.
+						\begin{center}
+							\begin{tikzpicture}[node distance=1.5cm]
+								\node (start) [numstart] {$0.634$};
+								\node (num1) [numbox, right of=start] {$0.072$};
+								\node (num2) [numbox, right of=num1] {$0.576$};
+								\node (num3) [numbox, right of=num2] {$0.608$};
+								\node (num4) [numbox, right of=num3] {$0.864$};
+								\node (toplabel) [label, left of=start, xshift=-1cm] {\textbf{Decimal}};
+								\node (rem1) [numbox, below of=start] {$5$};
+								\node (rem2) [numbox, below of=num1] {$0$};
+								\node (rem3) [numbox, below of=num2] {$4$};
+								\node (rem4) [numbox, below of=num3] {$4$};
+								\node (bottomlabel) [label, left of=rem1, xshift=-1cm] {\textbf{Octal}};
+								\node (point) [label, left of=rem1, xshift=0.5cm] {$\bullet$};
+								\draw [arrow] (start) -- (num1);
+								\draw [arrow] (num1) -- (num2);
+								\draw [arrow] (num2) -- (num3);
+								\draw [arrow] (num3) -- (num4);
+								\draw [arrow] (start) -- (rem1);
+								\draw [arrow] (num1) -- (rem2);
+								\draw [arrow] (num2) -- (rem3);
+								\draw [arrow] (num3) -- (rem4);
+							\end{tikzpicture}
+						\end{center}
+						Therefore $\bigl(0.634\bigr)_{10}$ is approximately $\bigl(0.5044\bigr)_{8}$
+					\end{example}
+			\rulechapterend
+\end{document}

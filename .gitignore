@@ -7,5 +7,6 @@
 *.pdf
 *.synctex(busy)
 /.vscode/
+/out/
 *.thm
 *.toc

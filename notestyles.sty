@@ -39,6 +39,21 @@
 \RequirePackage[dvipsnames,table]{xcolor}
 \colorlet{process color}{MidnightBlue!25!white}
 \colorlet{program color}{red!30!white}
+\colorlet{example color}{blue!15!white}
+\colorlet{example title}{black}
+\colorlet{start color}{Lavender}
+
+% Tables
+\RequirePackage{booktabs}
+
+% Color Boxes
+\RequirePackage{parskip}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable}
+\RequirePackage{adjustbox}
+\newenvironment{example}[1][]
+	{\tcolorbox[coltitle=example title, colback=example color, breakable, detach title, before upper={\tcbtitle\quad}, title=\textbf{Example}, parbox=false, center, #1]}
+	{\endtcolorbox}
 
 % Include/Input Subfiles
 \RequirePackage{xstring}
@@ -61,6 +76,9 @@
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=process color]
 \tikzstyle{open} = [rectangle, minimum height=1cm, text centered]
 \tikzstyle{program} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=program color]
+\tikzstyle{numstart} = [rectangle, rounded corners, minimum width=2em, text centered, draw=black, fill=start color]
+\tikzstyle{numbox} = [rectangle, minimum width=2em, text centered, draw=black, fill=white]
+\tikzstyle{label} = [rectangle, text centered]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 % Horizontal Rules at document ends
