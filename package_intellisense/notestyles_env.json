@@ -1,4 +1,10 @@
 {
+  "definition{}": {
+    "name": "definition",
+    "detail": "definition{title}",
+    "snippet": "{${1:title}}",
+    "package": "notestyles"
+  },
   "indentparagraph": {
     "name": "indentparagraph",
     "detail": "indentparagraph",

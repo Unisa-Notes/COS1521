@@ -42,6 +42,8 @@
 \colorlet{example color}{blue!15!white}
 \colorlet{example title}{black}
 \colorlet{start color}{Lavender}
+\colorlet{definition color}{Aquamarine!30!white}
+\colorlet{definition border}{Aquamarine!75!black}
 
 % Tables
 \RequirePackage{booktabs}
@@ -53,6 +55,9 @@
 \RequirePackage{adjustbox}
 \newenvironment{example}[1][]
 	{\tcolorbox[coltitle=example title, colback=example color, breakable, detach title, before upper={\tcbtitle\quad}, title=\textbf{Example}, parbox=false, center, #1]}
+	{\endtcolorbox}
+\newenvironment{definition}[2][]
+	{\tcolorbox[breakable, colback=definition color, colframe=definition border, fonttitle=\bfseries, title={#2}, center title, parbox=false, center, #1]}
 	{\endtcolorbox}
 
 % Include/Input Subfiles

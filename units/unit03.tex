@@ -1,0 +1,364 @@
+\documentclass[../notes.tex]{subfiles}
+
+\begin{document}
+	\ifSubfilesClassLoaded{\setcounter{chapter}{2}}{}
+	\chapter{Data Storage}
+		Data comes in different forms:
+		\begin{itemize}
+			\item numbers
+			\item text
+			\item audio
+			\item images
+			\item video
+		\end{itemize}
+		\begin{definition}{Multimedia}
+			Information that contains numbers, text, audio, images and video.
+		\end{definition}
+		\section{Data inside the computer}
+			All data types inside a computer are represented as \concept{bit patterns}, which are then transformed into their original form when retrieved.
+			\begin{definition}{Bit}
+				Short for \concept{binary digit}. The smallest unit of data that can be stored in a computer. Has a value of $0$ or $1$.
+			\end{definition}
+			\begin{definition}{Bit Pattern}
+				A sequence or string of \concept{bits} that is used to represent data. A bit pattern with $8$ bits is called a \concept{byte}. A longer bit pattern can be referred to as a \concept{word}.
+			\end{definition}
+		\section{Storing Numbers}
+			A number is changed to binary before being stored in computer memory. However, there are different ways to store the sign of the number, and the decimal point. For the decimal point, there are $2$ representations: \concept{fixed-point} and \concept{floating-point}. \concept{Fixed-Point} representation stores a number as an integer, whereas \concept{floating-point} representation is used to store a number with a fractional part.
+			\subsection{Storing Integers}
+				Integers are stored in \concept{fixed-point representation}. \concept{Unsigned} and \concept{Signed} integers are stored differently.
+				\begin{definition}{Unsigned Integer}
+					An integer that can never be negative and can only take $0$ or positive values.\\
+					The range of these integers is $0$ to positive infinity. However, a computer cannot represent this entire range, so a value called the \concept{maximum unsigned integer} is defined as $2^{n} - 1$, where $n$ is the number of bits used to represent an unsigned integer.
+				\end{definition}
+				The number is stored in the computer as follows:
+				\begin{enumerate}
+					\item The integer is changed to binary.
+					\item If the number of bits is less than $n$, $0$s are added to the left of the binary value so that $n$ bits are used. If the number of bits is greater than $n$, then \concept{overflow} occurs.
+				\end{enumerate}
+				\begin{example}
+					Store the number $7$ is an $8$-bit memory location using unsigned representation.
+					\begin{enumerate}
+						\item $(7)_{10} = (111)_{2}$.
+						\item To store in $8$-bit, add $0$s in front. Therefore the answer is $00000111$.
+					\end{enumerate}
+				\end{example}
+				\subsubsection{Overflow}
+					\concept{Overflow} occurs when the number to be stored is larger than the \concept{maximum unsigned integer}. The number essentially ``rolls over''. The binary values to the left of the maximum digit are ignored.
+					\begin{example}
+						In a $4$-bit system, what number will the computer represent the decimal number $24$ as?\\
+						The maximum number in a $4$-bit system is $2^{4} - 1 = 15$. So the number $24$ will cause overflow.\\
+						The number $(24)_{10}$ in binary is $(11000)_{2}$.\\
+						The computer will ignore the values that are to the left of the highest number digits, so only $4$ digits can be stored.\\
+						So the number would be $(1000)_{2}$, which is $(8)_{10}$.
+					\end{example}
+				\subsubsection{Applications of unsigned integers}
+					\begin{itemize}
+						\item Counting
+						\item Addressing (access computer memory addresses)
+						\item Storing other data types
+					\end{itemize}
+				\subsubsection{Sign and Magnitude Representation}
+					\begin{definition}{Sign and Magnitude Representation}
+						Not commonly used to store integers, but often used to store part of a real number in a computer.\\
+						The available range for unsigned integers is divided into two equal subranges. The first half represents the positive integers, and the second half the negative integers.
+					\end{definition}
+					\begin{example}
+						Suppose that the number of bits is $4$. Then the values from $0000$ to $0111$ are the positive values, and the values from $1000$ to $1111$ are the negative values.\\
+						The negative numbers appear to the right of the positive numbers. There are also two zeros: positive zero $(0000)$ and negative zero $(1000)$.
+						The values would be:
+						\begin{center}
+							\begin{tabular}{rr}
+								\toprule
+								Bit Pattern & Decimal Value\\
+								\midrule
+								$0000$ & $0$\\
+								$0001$ & $1$\\
+								$0010$ & $2$\\
+								$0011$ & $3$\\
+								$0100$ & $4$\\
+								$0101$ & $5$\\
+								$0110$ & $6$\\
+								$0111$ & $7$\\
+								$1000$ & $-0$\\
+								$1001$ & $-1$\\
+								$1010$ & $-2$\\
+								$1011$ & $-3$\\
+								$1100$ & $-4$\\
+								$1101$ & $-5$\\
+								$1110$ & $-6$\\
+								$1111$ & $-7$\\
+								\bottomrule
+							\end{tabular}
+						\end{center}
+					\end{example}
+					\begin{example}
+						Store $+28$ in an $8$-bit memory location.
+						\begin{enumerate}
+							\item Change $28$ to binary. $(28)_{10} = (11000)_{2}$
+							\item Add zeros for the remaining $8 - 1$ spaces. $0011000$
+							\item Add the sign. $00011000$
+						\end{enumerate}
+					\end{example}
+					\begin{example}
+						Store $-67$ in an $8$-bit memory location.
+						\begin{enumerate}
+							\item Change $67$ to binary. $(67)_{10} = (1000011)$
+							\item Add zeros for the remaining $8 - 1$ spaces. There aren't any, so $1000011$
+							\item Add the sign. $11000011$
+						\end{enumerate}
+					\end{example}
+				\subsubsection{Two's Complement Representation}
+					\begin{definition}{Two's Complement Representation}
+						Typical method used to store a signed integer in an $n$-bit memory location.\\
+						The available range for an unsigned integer is divided into two equal subranges. The first half is used to represent nonnegative integers, and the second half is used to represent negative integers.\\
+						Then the largest number that can be represented by the bit pattern ($n$ $1$s) is $-1$.\\
+						The leftmost bit in a two's complement number represents the sign: if it is $0$, then the number is positive (or zero). If it is $1$, then the number is negative.
+					\end{definition}
+					\begin{definition}{One's Complement}
+						This operation simply reverses all the bits, so that a $1$ becomes a $0$, and vice versa.
+					\end{definition}
+					\begin{example}
+						Apply \concept{one's complement} to $1001101$.\\
+						Swapping the values, one would get: $0110010$.
+					\end{example}
+					\begin{definition}{Two's Complement}
+						There are two ways that this operation can be done
+						\begin{enumerate}
+							\item copy the bits from the right until a $1$ occurs, and then flip the remaining bits.
+							\item apply one's complement, and then add $1$
+						\end{enumerate}
+					\end{definition}
+					\begin{example}
+						Take the \concept{two's complement} of $10110100$.
+						\begin{description}
+							\item[First Method] 
+								\begin{enumerate}
+									\item Copy the bits from the right until a $1$ occurs. A $1$ occurs in the third position from the right, so the last three bits are $100$.
+									\item Flip the remaining bits. So the bits before the last three would now be $01001$.
+									\item So the final answer would be $01001100$.
+								\end{enumerate}
+							\item[Second Method]
+								\begin{enumerate}
+									\item Flip all the bits. $01001011$
+									\item Add $1$ to the result. $01001011 + 00000001 = 01001100$
+								\end{enumerate}
+						\end{description}
+					\end{example}
+					To retreive a value stored in two's complement form:
+					\begin{enumerate}
+						\item Get the binary value:
+							\begin{itemize}
+								\item If the leftmost bit is $1$, perform two's complement on the value.
+								\item Otherwise, no operation is applied.
+							\end{itemize}
+						\item Change the value from binary to decimal.
+					\end{enumerate}
+					\pagebreak
+					\begin{example}
+						Store the value $37$ in two's complement form in an $8$-bit memory location.
+						\begin{enumerate}
+							\item Convert to binary. $(37)_{10} = 32 + 4 + 1 = 100101$
+							\item Add preceding zeros. $00100101$
+							\item Apply sign. As the number is positive, $00100101$
+						\end{enumerate}
+					\end{example}
+					\begin{example}
+						Store the value $-57$ in two's complement form in an $8$-bit memory location.
+						\begin{enumerate}
+							\item Convert $57$ to binary. $(57)_{10} = 32 + 16 + 8 + 1 = 111001$
+							\item Add preceding zeros. $00111001$
+							\item Apply sign. As the number is negative, perform two's complement. $11000111$
+						\end{enumerate}
+					\end{example}
+			\subsection{Storing Reals}
+				Reals are stored in \concept{floating-point representation}. There are three parts of a \concept{floating-point} number: the \concept{sign}, the \concept{shifter}, and the \concept{fixed-point number}.
+				\begin{indentparagraph}
+					\begin{description}
+						\item[Sign] Either positive or negative
+						\item[Shifter] How many places the decimal point should be shifted to the left or right to form the number
+						\item[Fixed-point number] A fixed-point representation of the number with the decimal point in a fixed place
+					\end{description}
+				\end{indentparagraph}
+				\concept{Floating-point representation} is used in \concept{scientific notation}. The fixed-point section has only one digit to the left of the decimal point, and the shifter is the power of $10$.
+				\begin{example}
+					The number $+367800000$ can be written in scientific notation as $+3.678 \times 10^{8}$.\\
+					The number $-567$ can be written in scientific notation as $-5.67 \times 10^{2}$.\\
+					The number $0.0042$ can be written in scientific notation as $4.2 \times 10^{-3}$. 
+				\end{example}
+				This can then be expanded to binary numbers.
+				\begin{example}
+					The number $(100001001000.00)_{2}$ in floating-point format is $1.00001001 \times 2^{11}$.\\
+					The number $(-0.0000010101)_{2}$ in floating-point format is $-1.0101 \times 2^{-6}$.
+				\end{example}
+				\begin{definition}{Normalisation}
+					Only one non-zero digit is stored to the left of the decimal point.
+				\end{definition}
+				\pagebreak
+				After a binary number is normalised, three pieces of information are stored: \concept{sign}, \concept{exponent}, and \concept{mantissa}. The \concept{mantissa} are the bits to the right of the decimal point.
+				\begin{example}
+					The number $(+1001101.01)_{2}$ would become $+ 1.00110101 \times 2^{6}$.\\
+					The \concept{sign} would be $+$.\\
+					The \concept{exponent} would be $6$.\\
+					The \concept{mantissa} would be $00110101$.
+					\begin{indentparagraph}
+						Note that the $1$ before the decimal point, and the decimal point itself, do not need to be stored---they are implicit.
+					\end{indentparagraph}
+				\end{example}
+				\begin{definition}{The Excess System}
+					The \concept{excess system} is used to store the exponent of the floating-point number. The exponent is a signed number. In this system, both positive and negative numbers are stored as unsigned integers.
+					\begin{indentparagraph}
+						To represent a positive or negative number, a positive integer (called a \concept{bias}) is added to each number to shift them uniformly to the nonnegative side. The value of the \concept{bias} is $2^{m - 1} - 1$, where $m$ is the size of the memory location to store the exponent.
+					\end{indentparagraph}
+				\end{definition}
+				\begin{example}
+					If there are $4$ bits allocated to the exponent, then $16$ integers can be represented. If one uses $0$ as $0$ and arrange the other $15$ integers, then the numbers $-7$ to $8$ can be represented. Using a bias of $7$, the numbers from $0$ to $15$ are used for the excess system.
+					\begin{center}
+						\begin{tabular}{lrrrrrrrrrrrrrrrr}
+							\textbf{4-bit $\pm$} & $-7$ & $-6$ & $-5$ & $-4$ & $-3$ & $-2$ & $-1$ & $0$ &
+							$1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$\\
+							\midrule
+							\textbf{Excess-7} & $0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & 
+							$8$ & $9$ & $10$ & $11$ & $12$ & $13$ & $14$ & $15$\\
+						\end{tabular}
+					\end{center}
+				\end{example}
+				The \concept{Institute of Electrical and Electronics Engineers (IEEE)} has defined standards for storing floating-point numbers. The two most common are \concept{single-precision} and \concept{double-precision}.
+				\begin{center}
+					\begin{tabular}{lcc}
+						\toprule
+						Parameter & Single Precision & Double Precision\\
+						\midrule
+						Memory location size (in bits) & $32$ & $64$\\
+						Sign size (in bits) & $1$ & $1$\\
+						Exponent size (in bits) & $8$ & $11$\\
+						Mantissa size (in bits) & $23$ & $52$\\
+						Bias (integer) & $127$ & $1023$\\
+						\bottomrule
+					\end{tabular}
+				\end{center}
+				To store a floating-point number, where $S$ is the sign, $E$ is the exponent, and $M$ is the mantissa:
+				\begin{enumerate}[nosep]
+					\item Store the sign in $S$
+					\item Change the number to binary
+					\item Normalise the number
+					\item Find the values of $E$ and $M$
+					\item Concatenate $S$, $E$ and $M$, adding extra zeros to $M$ if needed.
+				\end{enumerate}
+				\pagebreak
+				\begin{example}
+					Show the Excess-127 (\concept{signle precision}) representation of the decimal number $5.75$.
+					\begin{enumerate}
+						\item Store the sign. Positive, so $S = 0$.
+						\item Convert the number to binary. $(5.75)_{10} = (101.11)_{2}$
+						\item Normalise. $(101.11)_{2} = (1.0111)_{2} \times 2^{2}$
+						\item $E = 2 + 127 = 129$. $(129)_{10} = (10000001)_{2}$. $M = 0111$, but need to add zeros to fill $23$ bits. $M = 01110000000000000000000$.
+						\item Concatenate. The final value is $010000000101110000000000000000000$.
+					\end{enumerate}
+				\end{example}
+		\section{Storing Text}
+			\begin{definition}{Text}
+				A sequence of symbols used to represent an idea in a language.
+			\end{definition}
+			Each symbol in text can be represented using a bit-pattern. The number of bits needed is dependent on the number of symbols in the language. This relationship is not linear, but logarithmic. In other words, the number of bits needed for $n$ characters is $\log_{2}n$. If $1024$ symbols are needed, then $10$ bits are needed.
+			\subsection{Codes}
+				\begin{definition}{Code}
+					A set of bit patterns used to represent text symbols.
+				\end{definition}
+				The two most common \concept{codes} are \concept{ASCII} and \concept{Unicode}.
+				\begin{definition}{ASCII}
+					Short for \concept{American Standard Code for Information Interchange}, developed by the \concept{American National Standards Institute (ANSI)}.
+					\begin{indentparagraph}
+						$7$ bits are used for each symbol, so a total of $2^{7} = 128$ symbols can be defined.
+					\end{indentparagraph}
+				\end{definition}
+				\begin{definition}{Unicode}
+					$32$ bits are used for each symbol, so a total of $2^{32} = 4 \, 294 \, 967 \, 296$ symbols can be defined. Different sections of the code are allocated to symbols from different languages. Parts of the code are also used for graphical and special symbols. ASCII is part of Unicode.
+				\end{definition}
+			\pagebreak
+		\section{Storing Audio}
+			\begin{definition}{Audio}
+				A representation of sound or music.
+			\end{definition}
+			Unlike text, which is \concept{digital} data, audio is \concept{analogue} data. Therefore, the way audio is stored is using the intensity of the audio signal over a period of time.
+			\subsection{Sampling}
+				Recording all the values of an audio signal over an interval is not possible. However, recording \emph{some} of them is.
+				\begin{definition}{Sampling}
+					Select a finite number of points on the analogue signal, measure the values, and record them.
+				\end{definition}
+				\begin{definition}{Sampling Rate}
+					The number of samples needed to accurately reproduce the audio signal depends on the maximum number of changes of the signal. If the signal does not change a lot, fewer samples are needed.
+					\begin{indentparagraph}
+						The sampling/sample rate is the number of samples being taken per second. A sample rate of $40 \, 000$ samples is typically good enough.
+					\end{indentparagraph}
+				\end{definition}
+			\subsection{Quantization}
+				Each sample is a real number that needs to be stored. However, it would be simpler to store an unsigned bit pattern (without a floating-point) for each sample.
+				\begin{definition}{Quantization}
+					The process of rounding the value of a sample to the closest integer value.
+				\end{definition}
+			\subsection{Encoding}
+				The quantized samples need to be understood by the computer, so they need to be encoded as bit patterns. This can happen in many different ways: using positive and negative values (either in two's complement form or sign-and-magnitude), or shifting the curve, and assigning only positive values.
+				\begin{definition}{Bits per sample}
+					It needs to be determined how many bits will be used to represent each sample. Previously $8$ bits were used, but today $16$, $24$ and $32$ bits per sample is common. This is also called the \concept{bit depth}.
+				\end{definition}
+				\begin{definition}{Bit rate}
+					This is the number of bits that needs to be stored for each second of audio.
+				\end{definition}
+				\subsubsection{Standards for sound encoding}
+					The dominant standard for storing audio is \concept{MP3}, short for \concept{MPEG Layer 3}. This is a modification of the \concept{MPEG (Motion Picture Experts Group)} compression method used for video.
+					\begin{indentparagraph}
+						It uses $44 \, 100$ samples per second, and $16$ bits per sample. The bit rate is $705 \, 600$ bits per second, which is compressed to remove information that cannot be detected by the human ear. This is \concept{lossy compression}.
+					\end{indentparagraph}
+		\section{Storing Images}
+			Images are stored using two different techniques: \concept{raster graphics} and \concept{vector graphics}.
+			\subsection{Raster Graphics}
+				\begin{definition}{Raster Graphics}
+					Also called \concept{bitmap graphics}. Used to store an \emph{analogue} image.
+					\begin{indentparagraph}
+						The intensity (color) of the data varies in space. The data must be sampled, which for images is called \concept{scanning}. The samples are called \concept{pixels}, which is short for \concept{picture elements}.
+					\end{indentparagraph}
+				\end{definition}
+				Issues related to raster graphics are:
+				\begin{itemize}[nosep]
+					\item the file size is big
+					\item rescaling is troublesome
+				\end{itemize}
+				\begin{definition}{Resolution}
+					The scanning rate in image processing.
+				\end{definition}
+				\subsubsection{Color depth}
+					\begin{definition}{Color Depth}
+						The number of bits used to represent a pixel. Is dependent on the different encoding techniques.
+						\begin{indentparagraph}
+							The way one perceives color is the way one's eyes respond to a beam of light. This is dependent on different \concept{photoreceptor cells}, some which respond to the primary colors (\concept{RGB}), and others to the intensity of light.
+						\end{indentparagraph}
+					\end{definition}
+					\pagebreak
+					\begin{definition}{True-Color}
+						An encoding technique that uses $24$ bits to encode a pixel. Each of the three primary colors (red, green, blue) is represented by $8$ bits. Each color is represented by three decimal numbers between $0$ and $255$. The number of colors that can be encoded is $2^{24} = 16\,776\,216$ colors.
+					\end{definition}
+					\begin{definition}{Indexed-color}
+						Also called \concept{palette color}. Only a portion of the colors in the \concept{True-Color} scheme are chosen. Each application selects a few (normally $256$) colors from the True-Color scheme, and assigns a number between $0$ and $255$ to each selected color. The number of bits needed to store a color is only $8$, unlike the $24$ for True-Color. The number of colors that can be encoded is $2^{8} = 256$ colors.
+					\end{definition}
+				\subsubsection{Standards for Image Encoding}
+					Some standard encoding schemes for raster images are \concept{JPEG (Joint Photographic Experts Group)}, which uses the True-Color scheme, but compresses the image, and \concept{GIF (Graphic Interchange Format)}, which uses the indexed color scheme.
+			\subsection{Vector Graphics}
+				\begin{definition}{Vector Graphics}
+					Bit patterns for each pixel are not stored. Rather, an image is decomposed into a combination of geometrical shapes. Each shape is represented by a mathematical formula.
+					\begin{indentparagraph}
+						When displaying the image, the size of the image is given to the system as an input. The image is redrawn to that size. 
+					\end{indentparagraph}
+					\begin{indentparagraph}
+						Vector graphics are also called \concept{geometric modelling} or \concept{object-oriented graphics}.
+					\end{indentparagraph}
+				\end{definition}
+				Vector graphics is not suitable for storing photographic images, but is suitable for applications that use mainly geometric primitives to produce images. It is used in applications like \concept{FLASH}, \concept{TrueType} and \concept{Postscript} fonts, and \concept{Computer-aided design (CAD)}.
+		\section{Storing Video}
+			\begin{definition}{Video}
+				A representation on images (called \concept{frames}) over time. In other words, it is the representation of information that changes in space, and in time.
+				\begin{indentparagraph}
+					To store video, each image or frame is transformed into a set of bit patterns and stored. Video is normally compressed---MPEG is a common video compression technique.
+				\end{indentparagraph}
+			\end{definition}
+		\rulechapterend
+\end{document}
