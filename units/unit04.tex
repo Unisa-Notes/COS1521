@@ -1,0 +1,545 @@
+\documentclass[../notes.tex]{subfiles}
+
+\begin{document}
+	\ifSubfilesClassLoaded{\setcounter{chapter}{3}}{}
+	\chapter{Operations on Data}
+		The three types of operations on data are \concept{logic operations}, \concept{shift operations}, and \concept{arithmetic operations}.
+		\section{Logic Operations}
+			\begin{definition}{Logic Operation}
+				An operation that applies the same basic operation on individual bits of a pattern, or on two corresponding bits in two patterns.
+			\end{definition}
+			A bit can be either $0$ or $1$. If $0$ is interpreted as \emph{false}, and $1$ is interpreted as \emph{true}, then \hyperref[ch:boolean]{\concept{boolean algebra}} can be applied to manipulate bits. The various operators are defined in that chapter.
+			\subsection{Applications of Logic Operations}
+				\begin{description}
+					\item[Complementing] Using a \concept{NOT} operator changes every $0$ to a $1$ and vice versa. This is also known as a \concept{one's complement operation}.
+					\item[Unsetting specific bits] Using a \concept{AND} operator, you can unset specific bits in a bit pattern. The second input is called a \concept{mask}. Any location in the mask where the bit is $0$ will cause the location in the original bit pattern to also be $0$.
+					\item[Setting specific bits] Using a \concept{OR} operator, you can set specific bits in a bit pattern. This is also called a \concept{mask}. Any location in the mask where the bit is $1$ will cause the location in the original bit pattern to also be $1$.
+					\item[Flipping specific bits] Using an \concept{XOR} operator, you can complement (flip) specific bits in a bit pattern. Also uses a \concept{mask}. Any location in the mask where the bit is $1$ will cause the location in the original pattern to swap.
+				\end{description}
+		\section{Shift Operations}
+			\begin{definition}{Shift Operation}
+				An operation that moves the bits in a pattern, changing the position of the bits. There are two types: \concept{logical shift operations} and \concept{arithmetic shift operations}.
+			\end{definition}
+			\subsection{Logical Shift Operations}
+				These operations are applied to patterns that do not represent a signed number. This is because a shift operation could change the leftmost bit that defines the sign of the number.
+				\begin{definition}{Simple Shift}
+					A \concept{simple shift right} operation shifts each bit one position to the right. The rightmost bit is lost, and $0$ fills the leftmost bit.\\[12pt]
+					A \concept{simple shift left} operation shifts each bit one position to the left. The leftmost bit is lost, and $0$ fills the rightmost bit.
+					\begin{example}
+						Use a simple left shift operation on the bit pattern $10011010$.\\
+						The new bit pattern would be $00110100$.
+					\end{example}
+				\end{definition}
+				\begin{definition}{Circular Shift}
+					A \concept{circular shift} operation (or \concept{rotate} operation) shifts each bit to either direction, where the last bit becomes the first.\\[12pt]
+					A \concept{circular shift right} operation shifts each bit one position to the right. The rightmost bit circulates and becomes the leftmost bit.\\[12pt]
+					A \concept{circular shift left} operation shifts each bit one position to the left. The leftmost bit circulates and becomes the rightmost bit.
+					\begin{example}
+						Use a circular left shift operation on the bit pattern $11001000$.\\
+						The new bit pattern would be $10010001$.
+					\end{example}
+				\end{definition}
+			\pagebreak
+			\subsection{Arithmetic Shift Operations}
+				These operations assume that the bit pattern is a signed integer in two's complement form. \concept{Arithmetic right shift} is used to divide an integer by $2$, while \concept{arithmetic left shift} multiplies an integer by $2$.
+				\begin{definition}{Arithmetic Right Shift}
+					This operation is used to divide an integer by $2$. The leftmost (sign) bit is copied to the location to the right. The rightmost bit is lost.
+					\begin{example}
+						Use an arithmetic right shift operation on the two's complement bit pattern $10010010$.\\
+						The sign is copied from the left to the next one: $11$. And then copy the bits from the second to the second last.\\
+						The answer is $11001001$. The original value was $(-110)_{10}$, and the new value is $(-55)_{10}$.
+					\end{example}
+				\end{definition}
+				\begin{definition}{Arithmetic Left Shift}
+					This operation is used to multiply an integer by $2$. This works the same way as a simple shift. If the sign after the shift is the same as the sign before the shift, then the operation is valid. Otherwise an overflow or underflow has occured.
+					\begin{example}
+						Use an arithmetic left shift operation on the two's complement bit pattern $00110101$.\\
+						The result would be $01101010$. The original value was $(53)_{10}$, and the new value is $(106)_{10}$. As the sign is the same, this is a valid operation.
+					\end{example}
+					\begin{example}
+						Use an arithmetic left shift operation on the two's complement bit pattern $01001001$.\\
+						The result of a simple left shift would be $10010010$. As the sign is different, this is not a valid operation.\\
+						The original value was $(73)_{10}$, and the new value is $(-110)_{10}$.
+					\end{example}
+				\end{definition}
+		\pagebreak
+		\section{Arithmetic Operations}
+			\begin{definition}{Arithmetic Operation}
+				An operation that adds, subtracts, multiplies, or divides two bit patterns.
+			\end{definition}
+			\subsection{Arithmetic Operations on Integers}
+				\subsubsection{Integers in Two's Complement}
+					\begin{definition}{Two's Complement Subtraction}
+						If $\overline{B}$ is the one's complement of $B$, then $\left(\overline{B} + 1\right)$ is the two's complement of $B$.
+						\begin{align*}
+							A - B \leftrightarrow A + \left(\overline{B} + 1\right)
+						\end{align*}
+					\end{definition}
+					To add two integers, start from the rightmost column. Add the two bits.
+					\begin{itemize}
+						\item If the two bits are both $1$, then that is $1 + 1$, so store $0$ and carry the $1$ over to the next column.
+					\end{itemize}
+					\begin{example}
+						Add the two integers stored in two's complement format:\\
+						$00001001 + 00101101$.
+						\begin{center}
+							\begin{tabular}{ccccccccc}
+								    &     &     &     &     & $^{1}$ &     & $^{1}$ & \\
+								    & $0$ & $0$ & $0$ & $0$ & $1$    & $0$ & $0$    & $1$\\
+								$+$ & $0$ & $0$ & $1$ & $0$ & $1$    & $1$ & $0$    & $1$\\
+								\midrule
+								    & $0$ & $0$ & $1$ & $1$ & $0$ & $1$ & $1$ & $0$
+							\end{tabular}
+						\end{center}
+						Converting to decimal, this gives us $(9)_{10} + (45)_{10} = (54)_{10}$
+					\end{example}
+					\begin{example}
+						Add the two integers stored in two's complement format:\\
+						$00101000 + 11111011$.
+						\begin{center}
+							\begin{tabular}{ccccccccc}
+								$^{1}$ & $^{1}$ & $^{1}$ & $^{1}$ & $^{1}$ &     &     &     &    \\
+								       & $0$    & $0$    & $1$    & $0$    & $1$ & $0$ & $0$ & $0$\\
+								$+$    & $1$    & $1$    & $1$    & $1$    & $1$ & $0$ & $1$ & $1$\\
+								\midrule
+								       & $0$    & $0$    & $1$    & $0$    & $0$ & $0$ & $1$ & $1$
+							\end{tabular}
+						\end{center}
+						Converting to decimal, this gives us $(40)_{10} + (-5)_{10} = (35)_{10}$
+					\end{example}
+					\pagebreak
+					\begin{example}
+						Subtract the second integer from the first. Both integers are stored in two's complement format.\\
+						$00100111 - 11011011$.
+						\begin{enumerate}
+							\item Apply two's complement to the second integer. $11011011 \rightarrow 00100101$
+							\item Add the two values:
+								\begin{center}
+									\begin{tabular}{ccccccccc}
+										    &     & $^{1}$ &     &     & $^{1}$ & $^{1}$ & $^{1}$ & \\
+										    & $0$ & $0$    & $1$ & $0$ & $0$    & $1$    & $1$    & $1$\\
+										$+$ & $0$ & $0$    & $1$ & $0$ & $0$    & $1$    & $0$    & $1$\\
+										\midrule
+										    & $0$ & $1$    & $0$ & $0$ & $1$    & $1$    & $0$    & $0$
+									\end{tabular}
+								\end{center}
+						\end{enumerate}
+						In decimal form: $(39)_{10} - (-37)_{10} = (76)_{10}$
+					\end{example}
+			\rulechapterend
+
+	\clearpage\begingroup\pagestyle{empty}\cleardoublepage\endgroup
+	\fancyfoot[C]{\thepage}
+	% Set Chapter Number to E
+	\newcounter{oldchapter}
+	\setcounter{oldchapter}{\value{chapter}}
+	\setcounter{chapter}{4}
+	\renewcommand{\thechapter}{\Alph{chapter}}
+	\chapter{Boolean Algebra and Logic Circuits}
+		\label{ch:boolean}
+		\section{Boolean Algebra}
+			\begin{definition}{Boolean Algebra}
+				A part of algebra and logic that deals with variables and constants that take only one of two values: $0$ or $1$.
+			\end{definition}
+			\subsection{Operators}
+				Three basic operators are used: NOT, AND, and OR.\\
+				A prime ($'$) is used to represent NOT, a dot ($.$ or $\cdot$) is used to represent AND, and a plus ($+$) is used to represent OR. XOR (Exclusive OR) is represented using a $\oplus$.
+			\subsection{Expressions}
+				\begin{definition}{Expression}
+					A combination of boolean operators, constants, and variables.
+				\end{definition}
+			\subsection{Logic Gates}
+				\begin{tikzpicture}
+					\node[buffer port] (Buff) at (0,0){};
+					\draw (Buff.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (Buff.out) -- ++(0.3,0) node[right]{$x$};
+					\node () [above of=Buff]{Buffer};
+					\node[not port] (Not) at (0,-2){};
+					\draw (Not.in) -- ++(-0.3,0) node[left]{$x$};
+					\draw (Not.out) -- ++(0.3,0) node[right]{$x'$};
+					\node () [above of=Not]{NOT};
+					\node[and port] (And) at (3.8,0){};
+					\draw (And.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (And.in 2) -- ++(-0.3,0) node[left]{$y$};
+					\draw (And.out) -- ++(0.2,0) node[right]{$x \cdot y$};
+					\node () [above of=And]{AND};
+					\node[nand port] (Nand) at (3.8,-2){};
+					\draw (Nand.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (Nand.in 2) -- ++(-0.3,0) node[left]{$y$};
+					\draw (Nand.out) -- ++(0.2,0) node[right]{$(x \cdot y)'$};
+					\node () [above of=Nand]{NAND};
+					\node[or port] (Or) at (8.2,0){};
+					\draw (Or.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (Or.in 2) -- ++(-0.3,0) node[left]{$y$};
+					\draw (Or.out) -- ++(0.2,0) node[right]{$x + y$};
+					\node () [above of=Or]{OR};
+					\node[nor port] (Nor) at (8.2,-2){};
+					\draw (Nor.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (Nor.in 2) -- ++(-0.3,0) node[left]{$y$};
+					\draw (Nor.out) -- ++(0.2,0) node[right]{$(x + y)'$};
+					\node () [above of=Nor]{NOR};
+					\node[xor port] (Xor) at (12.6,0){};
+					\draw (Xor.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (Xor.in 2) -- ++(-0.3,0) node[left]{$y$};
+					\draw (Xor.out) -- ++(0.2,0) node[right]{$x \oplus y$};
+					\node () [above of=Xor]{XOR};
+					\node[xnor port] (XNor) at (12.6,-2){};
+					\draw (XNor.in 1) -- ++(-0.3,0) node[left]{$x$};
+					\draw (XNor.in 2) -- ++(-0.3,0) node[left]{$y$};
+					\draw (XNor.out) -- ++(0.2,0) node[right]{$(x \oplus y)'$};
+					\node () [above of=XNor]{XNOR};
+				\end{tikzpicture}
+				\pagebreak
+				\begin{description}
+					\item[Buffer] The input signal is the same as the output signal. Works as an amplifier.
+						\begin{center}
+							\begin{tblr}{c | c}
+								$x$ & $x$\\
+								\midrule
+								$0$ & $0$\\
+								$1$ & $1$
+							\end{tblr}
+						\end{center}
+					\item[NOT] Complements (flips) the input signal.
+						\begin{center}
+							\begin{tblr}{c | c}
+								$x$ & $x'$\\
+								\midrule
+								$0$ & $1$\\
+								$1$ & $0$
+							\end{tblr}
+						\end{center}
+					\item[AND] Takes two inputs and creates one output. If both inputs are $1$, the output is $1$. Otherwise the output is $0$.
+						\begin{center}
+							\begin{tblr}{c c | c}
+								$x$ & $y$ & $x \cdot y$\\
+								\midrule
+								$0$ & $0$ & $0$\\
+								$0$ & $1$ & $0$\\
+								$1$ & $0$ & $0$\\
+								$1$ & $1$ & $1$
+							\end{tblr}
+						\end{center}
+					\item[NAND] A logical combination of the \concept{AND} and \concept{NOT} gates. If both inputs are $1$, the output is $0$. Otherwise the output is $1$.
+						\begin{center}
+							\begin{tblr}{c c | c}
+								$x$ & $y$ & $(x \cdot y)'$\\
+								\midrule
+								$0$ & $0$ & $1$\\
+								$0$ & $1$ & $1$\\
+								$1$ & $0$ & $1$\\
+								$1$ & $1$ & $0$
+							\end{tblr}
+						\end{center}
+					\item[OR] Takes two inputs and creates one output. If either of the inputs is $1$, the output is $1$. Otherwise the output is $0$.
+						\begin{center}
+							\begin{tblr}{c c | c}
+								$x$ & $y$ & $x + y$\\
+								\midrule
+								$0$ & $0$ & $0$\\
+								$0$ & $1$ & $1$\\
+								$1$ & $0$ & $1$\\
+								$1$ & $1$ & $1$
+							\end{tblr}
+						\end{center}
+					\item[NOR] A logical combination of the \concept{OR} and \concept{NOT} gates. If either of the inputs is $1$, the output is $0$. Otherwise the output is $1$.
+						\begin{center}
+							\begin{tblr}{c c | c}
+								$x$ & $y$ & $(x + y)'$\\
+								\midrule
+								$0$ & $0$ & $1$\\
+								$0$ & $1$ & $0$\\
+								$1$ & $0$ & $0$\\
+								$1$ & $1$ & $0$
+							\end{tblr}
+						\end{center}
+					\item[XOR] Takes two inputs and creates one output. If one (and \emph{only} one) of the inputs is $1$, the output is $1$. Otherwise the output is $0$.
+						\begin{center}
+							\begin{tblr}{c c | c}
+								$x$ & $y$ & $x \oplus y$\\
+								\midrule
+								$0$ & $0$ & $0$\\
+								$0$ & $1$ & $1$\\
+								$1$ & $0$ & $1$\\
+								$1$ & $1$ & $0$
+							\end{tblr}
+						\end{center}
+					\item[XNOR] A logical combination of the \concept{XOR} and \concept{NOT} gates. If one (and \emph{only} one) of the inputs is $1$, the output is $0$. Otherwise the output is $1$.
+						\begin{center}
+							\begin{tblr}{c c | c}
+								$x$ & $y$ & $(x \oplus y)'$\\
+								\midrule
+								$0$ & $0$ & $1$\\
+								$0$ & $1$ & $0$\\
+								$1$ & $0$ & $0$\\
+								$1$ & $1$ & $1$
+							\end{tblr}
+						\end{center}
+				\end{description}
+			\subsection{Boolean Algebra Rules}
+				\begin{enumerate}[label=(\alph*), labelsep=2.5em, leftmargin=*]
+					\item $(x + y) + z = x + (y + z)$\\
+						$(xy)z = x(yz)$ \hfill (associative rule)
+					\item $x + y = y + x$\\
+						$xy = yx$ \hfill (commutative rule)
+					\item $x + (yz) = (x + y)(x + z)$\\
+						$x(y + z) = xy + xz$ \hfill (distributive rule)
+					\item $x + 0 = x$\\
+						$x \cdot 1 = x$ \hfill (identity rule)
+					\item $x + x' = 1$\\
+						$x \cdot x' = 0$ \hfill (complement rule)
+					\item $x + x = x$\\
+						$x \cdot x = x$ \hfill (idempotence rule)
+					\item $x + (xy) = x$\\
+						$x (x + y) = x$\\
+						$x (x' + y) = xy$\\
+						$x'(x + y) = x'y$\\
+						$x + (x' \cdot y) = x + y$\\
+						$x' + (x \cdot y) = x' + y$ \hfill (absorption rule)
+					\item $x + 1 = 1$\\
+						$x \cdot 0 = 0$ \hfill (boundedness rule)
+					\item $(x + y)' = x' \cdot y'$\\
+						$(xy)' = x' + y'$ \hfill (De Morgan's rule)
+					\item $\left(x'\right)' = x$ \hfill (Involution rule (Double negative))
+				\end{enumerate}
+			\subsection{Boolean Functions}
+				\begin{definition}{Boolean Function}
+					A function with $n$ boolean input variables, and one boolean output variable.
+					\begin{indentparagraph}
+						These functions can be represented using truth tables or expressions.
+					\end{indentparagraph}
+				\end{definition}
+				\subsubsection{Converting from truth tables to expressions}
+					\begin{definition}{Sum of Products}
+						A function is made up of $2^{n}$ terms, where each term is called a \concept{minterm}. A \concept{minterm} is a product of all the variables in a function in which each variable appears only once. Each minterm represents a row in the truth table.
+					\end{definition}
+					\begin{definition}{M-notation}
+						The subscript of a minterm is derived from the binary values of the terms in order. For example, $m_{6}$ would be $(6)_{10} = (110)_{2}$, so $xyz'$.\\
+						$x'y'z$ would be $(001)_{2}$, so $(1)_{10}$, so $m_{1}$.
+					\end{definition}
+					\begin{sidenote}{Transforming a Boolean Function to Sum of Products}
+						Every variable in the expression needs to appear in each term, in order to use sum of minterms. Use the complement rule ($x + x' = 1$) to include the missing variables. The order the variables appear in must be the \emph{same for all minterms}.
+					\end{sidenote}
+					\begin{example}
+						Convert $F = A'C + AB'$ to sum of minterms.
+						\begin{align*}
+							F &= A'C + AB'\\
+							  &= A'\left(B + B'\right)C + AB'\left(C + C'\right)\\
+								&= \left(A'B + A'B'\right)C + AB'C + AB'C'\\
+								&= A'BC + A'B'C + AB'C + AB'C'\\
+								&= m_{(011)_{2}} + m_{(001)_{2}} + m_{(101)_{2}} + m_{(100)_{2}}\\
+								&= m_{3} + m_{1} + m_{5} + m_{4}
+						\end{align*}
+					\end{example}
+					\begin{example}
+						Given the expression $F = x'yz$, what would the minterm subscript be?
+						\begin{indentparagraph}
+							The minterm has $x = 0$, $y = 1$ and $z = 1$, so $011$.\\
+							$(011)_{2} = (3)_{10}$, so the subscript is $3$. This is $m_{3}$, which would be the $4$th row in a truth table, as minterms start with $0$.
+						\end{indentparagraph}
+					\end{example}
+					\pagebreak
+					\begin{sidenote}{Truth tables, Minterms, and m-notation}
+						\begin{center}
+							\begin{tblr}{cc | lcr}
+								$x$ & $y$ & minterms & binary & m-notation\\
+								\midrule
+								$0$ & $0$ & $x'y'$ & $00$ & $m_{0}$\\
+								$0$ & $1$ & $x'y$  & $01$ & $m_{1}$\\
+								$1$ & $0$ & $xy'$  & $10$ & $m_{2}$\\
+								$1$ & $1$ & $xy$   & $11$ & $m_{3}$
+							\end{tblr}
+							\begin{tblr}{ccc | lcr}
+								$x$ & $y$ & $z$ & minterms & binary & m-notation\\
+								\midrule
+								$0$ & $0$ & $0$ & $x'y'z'$ & $000$ & $m_{0}$\\
+								$0$ & $0$ & $1$ & $x'y'z$  & $001$ & $m_{1}$\\
+								$0$ & $1$ & $0$ & $x'yz'$  & $010$ & $m_{2}$\\
+								$0$ & $1$ & $1$ & $x'yz$   & $011$ & $m_{3}$\\
+								$1$ & $0$ & $0$ & $xy'z'$  & $100$ & $m_{4}$\\
+								$1$ & $0$ & $1$ & $xy'z$   & $101$ & $m_{5}$\\
+								$1$ & $1$ & $0$ & $xyz'$   & $110$ & $m_{6}$\\
+								$1$ & $1$ & $1$ & $xyz$    & $111$ & $m_{7}$
+							\end{tblr}
+						\end{center}
+						\begin{center}
+							\begin{tblr}{cccc | lcr}
+								$A$ & $B$ & $C$ & $D$ & minterms & binary & m-notation\\
+								\midrule
+								$0$ & $0$ & $0$ & $0$ & $A'B'C'D'$ & $0000$ & $m_{0}$\\ 
+								$0$ & $0$ & $0$ & $1$ & $A'B'C'D$  & $0001$ & $m_{1}$\\ 
+								$0$ & $0$ & $1$ & $0$ & $A'B'CD'$  & $0010$ & $m_{2}$\\ 
+								$0$ & $0$ & $1$ & $1$ & $A'B'CD$   & $0011$ & $m_{3}$\\ 
+								$0$ & $1$ & $0$ & $0$ & $A'BC'D'$  & $0100$ & $m_{4}$\\ 
+								$0$ & $1$ & $0$ & $1$ & $A'BC'D$   & $0101$ & $m_{5}$\\ 
+								$0$ & $1$ & $1$ & $0$ & $A'BCD'$   & $0110$ & $m_{6}$\\ 
+								$0$ & $1$ & $1$ & $1$ & $A'BCD$    & $0111$ & $m_{7}$\\ 
+								$1$ & $0$ & $0$ & $0$ & $AB'C'D'$  & $1000$ & $m_{8}$\\ 
+								$1$ & $0$ & $0$ & $1$ & $AB'C'D$   & $1001$ & $m_{9}$\\ 
+								$1$ & $0$ & $1$ & $0$ & $AB'CD'$   & $1010$ & $m_{10}$\\ 
+								$1$ & $0$ & $1$ & $1$ & $AB'CD$    & $1011$ & $m_{11}$\\ 
+								$1$ & $1$ & $0$ & $0$ & $ABC'D'$   & $1100$ & $m_{12}$\\ 
+								$1$ & $1$ & $0$ & $1$ & $ABC'D$    & $1101$ & $m_{13}$\\ 
+								$1$ & $1$ & $1$ & $0$ & $ABCD'$    & $1110$ & $m_{14}$\\ 
+								$1$ & $1$ & $1$ & $1$ & $ABCD$     & $1111$ & $m_{15}$\\ 
+							\end{tblr}
+						\end{center}
+					\end{sidenote}
+			\pagebreak
+			\subsection{Function Simplification}
+				To simplify boolean functions, one can use the boolean algebra rules above. One can also use \concept{Karnaugh Maps}.
+				\begin{definition}{Karnaugh Map}
+					A \concept{Karnaugh map}, or \concept{k-map} is a graphic representation of a Boolean function, where squares are used to represent minterms. The diagram is filled in the order $1$, $2$, $4$, $3$.\\
+					\textbf{NB: Swap the last two.}
+					\begin{center}
+						\begin{karnaugh-map}[2][2][1][$B$][$A$]
+							\manualterms{$m_{0}$,$m_{1}$,$m_{2}$,$m_{3}$}
+						\end{karnaugh-map}
+						\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
+							\manualterms{$m_{0}$,$m_{1}$,$m_{2}$,$m_{3}$,$m_{4}$,$m_{5}$,$m_{6}$,$m_{7}$}
+						\end{karnaugh-map}
+						\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
+							\manualterms{$m_{0}$,$m_{1}$,$m_{2}$,$m_{3}$,$m_{4}$,$m_{5}$,$m_{6}$,$m_{7}$,$m_{8}$,$m_{9}$,$m_{10}$,$m_{11}$,$m_{12}$,$m_{13}$,$m_{14}$,$m_{15}$}
+						\end{karnaugh-map}
+					\end{center}
+					If the diagram is written with a heading grouping two rows or columns, the row or column is $1$, and $0$ in the area not grouped.
+				\end{definition}
+				\concept{Karnaugh Maps} are used in order to find the simplest form of a function. Groups of $1$s within the diagram can be grouped in sets of $1$, $2$, $4$, $8$ or $16$. Then the values that are common can be used to defined the term.
+				\begin{sidenote}{Remember values wrap around!}
+					Values at the top can be grouped with values on the bottom, and values on the right can be grouped with values on the left.
+				\end{sidenote}
+				\pagebreak
+				\begin{exercise}{Karnaugh Map Exercises}
+					\begin{enumerate}
+						\item \question{Represent the boolean function $F_{1}(X, Y) = X'Y + XY'$ using a k-map.}
+							\begin{center}
+								\begin{karnaugh-map}[2][2][1][$Y$][$X$]
+									\minterms{1,2}
+								\end{karnaugh-map}
+							\end{center}
+						\item \question{Represent the boolean function $F_{2}(A,B,C) = A' + B'C + BC'$ using a k-map.}
+							\begin{align*}
+								F_{2}(A,B,C) &= A' + B'C + BC'\\
+								&= A'(B + B')(C + C') + (A + A')B'C + (A + A')BC'\\
+								&= A'B(C + C') + A'B'(C + C') + AB'C + A'B'C + ABC' + A'BC\\
+								&= A'BC + A'BC' + A'B'C + A'B'C' + AB'C + A'B'C + ABC' + A'BC\\
+								&= A'BC + A'BC' + A'B'C + A'B'C' + AB'C + ABC'\\
+								&= m_{3} + m_{2} + m_{1} + m_{0} + m_{5} + m_{6}
+							\end{align*}
+							\begin{center}
+								\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
+									\minterms{3,2,1,0,5,6}
+								\end{karnaugh-map}
+							\end{center}
+						\item \question{Given the following k-map, determine the simplest form of the function.}
+							\begin{center}
+								\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
+									\minterms{0,1,4,5,2,6,7}
+									\implicant{0}{5}
+									\implicant{4}{6}
+									\implicant{2}{6}
+								\end{karnaugh-map}
+							\end{center}
+							\begin{itemize}
+								\item The common parts of the red group are that $B = 0$. Both $A$ and $C$ can be either $0$ or $1$. Therefore this can be written $B'$.
+								\item The common parts of the green group are that $A = 1$. Both $B$ and $C$ can be either $0$ or $1$. Therefore this can be written $A$.
+								\item The common parts of the yellow group are that $B = 1$ and $C = 0$. $A$ can be either $0$ or $1$. Therefore this can be written $BC'$.
+							\end{itemize}
+							The function is therefore $A + B' + BC'$.
+					\end{enumerate}
+				\end{exercise}
+				\begin{sidenote}{Terms Grouped Together}
+					In a four-variable Karnaugh map, the number of squares grouped determine how many variables should be included in the term:
+					\begin{indentparagraph}
+						\begin{description}
+							\item[One square] Four variables
+							\item[Two squares] Three variables
+							\item[Four squares] Two variables
+							\item[Eight squares] One variable
+							\item[Sixteen squares] No variables (The term is equal to $1$)
+						\end{description}
+					\end{indentparagraph}
+				\end{sidenote}
+		\section{Logic Circuits}
+			\subsection{Combinational Circuits}
+				\begin{definition}{Combinational Circuit}
+					A circuit made up of a combination of logic gates with $n$ inputs and $m$ outputs. Each output is dependent on all given inputs.
+					\begin{center}
+						\begin{tikzpicture}[node distance=2cm]
+							\node (input) [open] {$n$ inputs};
+							\node (circuit) [process, right of=input, xshift=2cm] {Combinational Circuit};
+							\node (output) [open, right of=circuit, xshift=2cm] {$m$ outputs};
+							\draw [arrow] (input) -- (circuit);
+							\draw [arrow] (circuit) -- (output);
+						\end{tikzpicture}
+					\end{center}
+				\end{definition}
+				\subsubsection{Examples of combinational circuits}
+					\begin{indentparagraph}
+						\begin{description}
+							\item[Half adder] An adder that adds two bits. This contains two inputs and two outputs: the two inputs are the values to be added. The outputs are the result and the carry.
+							\item[Multiplexer] A combinational circuit with $n$ inputs and only one output.
+						\end{description}
+					\end{indentparagraph}
+			\subsection{Sequential Circuits}
+				\begin{definition}{Sequential Circuit}
+					A circuit that includes the concept of memory in the logic, which enables the circuit to remember its current state, which can then impact the future state.
+				\end{definition}
+				\subsubsection{Flip-flops}
+					\begin{definition}{Flip-flop}
+						A storage element that can hold one bit of information.
+					\end{definition}
+			\pagebreak
+			\subsection{Circuit Diagrams}
+				\begin{exercise}{Circuit Diagram Exercises}
+					\begin{enumerate}
+						\item \question{Given the following logic circuit, provide the outputs for each of the gates:}
+						\begin{center}
+							% \begin{circuitikz}[]
+							% 	\draw (0,0) node[nor port] (Ex1Nor){1};
+							% 	\draw (0,-2) node[or port] (Ex1Or){2};
+							% \end{circuitikz}
+							% \begin{circuitikz}[]
+							% 	\draw (4,2) node[and port] (Ex1And){4};
+							% 	\draw (2,0) node[nor port] (Ex1Nor){1};
+							% 	\draw (2,4) node[nand port] (Ex1Nand){3};
+							% \end{circuitikz}
+							% \begin{circuitikz}
+							% 	\draw (4,2) node[and port, scale=2] (Ex1And){4};
+							% 	\draw (Ex1And.in 2) -- ++(-1,0) node[nand port, anchor=out](Ex1Nand){3};
+							% 	\draw (Ex1And.in 1) -- ++(-3,0) node[nor port, anchor=out](Ex1Nor){1};
+							% \end{circuitikz}
+							\begin{circuitikz}
+								\draw 
+								(0,0) node[nor port, anchor=out, number inputs=3, scale=1.5] (Ex1Nor) {1}
+								(1,-1) node[and port] (Ex1And) {4}
+								(0,-2) node[nand port, anchor=out, scale=1.5] (Ex1Nand) {3}
+								% (-2,-1.5) node[or port, anchor=out, scale=0.7] (Ex1Or) {2}
+								% (-2,-0.5) node[not port, anchor=out, scale=0.7] (Ex1Not) {}
+								(Ex1Nor.out) |- (Ex1And.in 1)
+								(Ex1Nand.out) |- (Ex1And.in 2)
+								(Ex1Nand.in 1) -- ++(-0.5,0) node[or port, anchor=out, scale=0.8] (Ex1Or) {2}
+								(Ex1Nor.in 3) -- ++(-0.5,0) node[not port, anchor=out, scale=0.6] (Ex1Not) {}
+								(Ex1Nor.in 1) -- ++(-2,0) node[left]{$x$}
+								(Ex1Nor.in 2) -- ++(-2,0) node[left]{$y$}
+								(Ex1Not.in 1) -- ++(-1,0) node[left]{$z$}
+								(Ex1Or.in 1) -- ++(-1,0) node[left]{$x$}
+								(Ex1Or.in 2) -- ++(-1,0) node[left]{$y$}
+								(Ex1Nand.in 2) -- ++(-2,0) node[left]{$z$}
+								;
+							\end{circuitikz}
+						\end{center}
+						\begin{description}
+							\item[Gate 1] Nor Gate. $(x + y + z')'$
+							\item[Gate 2] Or Gate. $(x + y)$
+							\item[Gate 3] Nand Gate. $\bigl((x + y).z\bigr)'$
+							\item[Gate 4] And Gate. $(x + y + z')'.\bigl((x + y).z\bigr)'$
+						\end{description}
+					\end{enumerate}
+				\end{exercise}
+
+	\rulechapterend
+
+	\setcounter{chapter}{\value{oldchapter}}
+
+\end{document}

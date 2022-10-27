@@ -2,11 +2,11 @@
 \ProvidesPackage{notestyles}[2022/09/27 Kayzels Notes Styles]
 
 % Maths
-\usepackage{amssymb}
-\usepackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
 
 % Lists
-\usepackage{enumitem}
+\RequirePackage{enumitem}
 
 % Language Settings
 \RequirePackage[english=nohyphenation]{hyphsubst}
@@ -15,7 +15,7 @@
 \sloppy
 
 % Bookmarks
-\usepackage[bookmarksnumbered]{hyperref}
+\RequirePackage[bookmarksnumbered]{hyperref}
 
 % Headers, Footers and Margins
 \RequirePackage[margin=2cm, vmargin=3cm]{geometry}
@@ -46,9 +46,19 @@
 \colorlet{start color}{Lavender}
 \colorlet{definition color}{Aquamarine!30!white}
 \colorlet{definition border}{Aquamarine!75!black}
+\colorlet{gate color}{MidnightBlue!25!white}
+\colorlet{note color}{red!15!white}
+\colorlet{note border}{red!75!black}
+\colorlet{exercise color}{orange!25!white}
+\colorlet{exercise border}{orange!75!black}
+
+% Bold Math
+\let\oldtextbf\textbf
+\renewcommand{\textbf}[1]{\oldtextbf{\boldmath #1}}
 
 % Tables
-\RequirePackage{booktabs}
+\RequirePackage{tabularray}
+\UseTblrLibrary{booktabs}
 
 % Color Boxes
 \RequirePackage{parskip}
@@ -60,6 +70,12 @@
 	{\endtcolorbox}
 \newenvironment{definition}[2][]
 	{\tcolorbox[breakable, colback=definition color, colframe=definition border, fonttitle=\bfseries, title={#2}, center title, parbox=false, center, #1]}
+	{\endtcolorbox}
+\newenvironment{sidenote}[2][]
+	{\tcolorbox[breakable, colback=note color, colframe=note border, fonttitle=\bfseries, title={#2}, center title, parbox=false, center, #1]}
+	{\endtcolorbox}
+\newenvironment{exercise}[2][]
+	{\tcolorbox[breakable, colback=exercise color, colframe=exercise border, fonttitle=\bfseries, title={#2}, center title, parbox=false, center, #1]}
 	{\endtcolorbox}
 
 % Include/Input Subfiles
@@ -87,6 +103,18 @@
 \tikzstyle{numbox} = [rectangle, minimum width=2em, text centered, draw=black, fill=white]
 \tikzstyle{label} = [rectangle, text centered]
 \tikzstyle{arrow} = [thick,->,>=stealth]
+
+% Circuit Diagrams
+\RequirePackage{circuitikz}
+\ctikzset{
+						logic ports=ieee,
+						logic ports/scale=0.8,
+						logic ports/fill=gate color
+					}
+\usetikzlibrary{calc}
+
+% Karnaugh Maps
+\RequirePackage[label=corner]{karnaugh-map}
 
 % Horizontal Rules at document ends
 \newcommand{\rulebookend}{\vbox{\hrule width \hsize \kern 1mm \hrule width \hsize height 2pt}%
