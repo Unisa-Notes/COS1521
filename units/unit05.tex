@@ -1,0 +1,389 @@
+\documentclass[../notes.tex]{subfiles}
+
+\begin{document}
+	\ifSubfilesClassLoaded{\setcounter{chapter}{4}}{}
+	\chapter{Computer Organization}
+		The parts that make up a computer can be divided into three broad categories: the \concept{entral processing unit (CPU)}, the \concept{main memory}, and the \concept{input/output subsystem}.
+		\section{Central Processing Unit}
+			\begin{definition}{Central Processing Unit (CPU)}
+				Performs operations on data. In most architectures, it has three parts: an \concept{Arithmetic Logic Unit (ALU)}, a \concept{control unit}, and a set of \concept{registers}.
+			\end{definition}
+			\subsection{Arithmetic Logic Unit}
+				\begin{definition}{Arithmetic Logic Unit}
+					Performs logic, shift, and arithmetic operations on data.
+				\end{definition}
+			\subsection{Registers}
+				\begin{definition}{Register}
+					Fast stand-alone storage locations that hold data temporarily.
+				\end{definition}
+				Different types of registers include:
+				\begin{indentparagraph}
+					\begin{description}
+						\item[Data registers] Holds the input data and result of the operations.
+						\item[Instruction registers] Holds the instructions for programs being run.
+						\item[Program counter] Holds the location of the instruction currently being executed.
+					\end{description}
+				\end{indentparagraph}
+			\subsection{Control Unit}
+				\begin{definition}{Control Unit}
+					Controls the operation of each subsystem using signals sent from the control unit to other subsystems.
+				\end{definition}
+		\section{Main Memory}
+			\begin{definition}{Main Memory}
+				A collection of storage locations, wach with a unique identifier called an \concept{address}. Data is transferred to and from different addresses in groups of bits called \concept{words}. A word that is $8$ bits is referred to as a \concept{byte}.
+			\end{definition}
+			\subsection{Address Space}
+				\begin{definition}{Address Space}
+					The total number of uniquely identifiable locations in memory.
+				\end{definition}
+				\begin{sidenote}{Memory Units}
+					\begin{center}
+						\begin{tabular}{llc}
+							Unit & Exact Number of Bytes & Approximation\\
+							\midrule
+							kilobyte & $2^{10}$ $(1024)$ & $10^{3}$\\
+							megabyte & $2^{20}$ $(1\,048\,576)$ & $10^{6}$\\
+							gigabyte & $2^{30}$ $(1\,073\,741\,824)$ & $10^{9}$\\
+							terabyte & $2^{40}$ & $10^{12}$
+						\end{tabular}
+					\end{center}
+				\end{sidenote}
+				Memory addresses are defined using unsigned binary integers.
+				\begin{example}
+					A computer has $32$ MB of memory. How many bits are needed to address any single byte in memory?
+					\begin{enumerate}[nosep]
+						\item Determine the memory space: $32$ MB is $2^{5} \times$ MB, which is $2^{5} \times 2^{20} = 2^{25}$ bytes.
+						\item Determine the number of bits needed. $\log_{2}2^{25}$, which is $25$ bits.
+					\end{enumerate}
+				\end{example}
+				\begin{example}
+					A computer has $128$ MB of memory. Each word in this computer is $8$ bytes. How many bits are needed to address any single word in memory?
+					\begin{enumerate}[nosep]
+						\item Determine the memory space: $128$ MB is $2^{7} \times$ MB, which is $2^{27}$ bytes.
+						\item Determine how many bytes each word needs. Each word is $8 (2^{3})$ bytes.
+						\item Subtract the total of how many bytes each word needs from the memory space. $2^{27 - 3} = 2^{24}$
+						\item Determine the number of bits needed. $\log_{2}2^{254}$, which is $24$ bits.
+					\end{enumerate}
+				\end{example}
+			\subsection{Memory Types}
+				Two main types of memory exist: \concept{RAM} and \concept{ROM}.
+				\subsubsection{RAM}
+					\begin{definition}{Random Access Memory (RAM)}
+						Data and can be accessed randomly, without needing to access the data before it. RAM can be both read from, and written to. RAM is \concept{volatile}: the information stored inside it is lost if the computer is powered down.
+					\end{definition}
+					There are two broad categories of RAM: \concept{SRAM} and \concept{DRAM}.
+					\begin{indentparagraph}
+						\begin{description}
+							\item[SRAM (Static RAM)] uses traditional \concept{flip-flop gates} to hold data. The gates hold their state, which means the data is stored as long as the power is on --- there is no need to refresh memory locations. Fast, but expensive.
+							\item[DRAM (Dynamic RAM)] uses \concept{capacitors} (electrical devices that can store energy) for data storage. If the capacitor is charged, the state is $1$. If it is discharged, the state is $0$. As capacitors lose charge with time, memory locations need to be refreshed. Slow, but inexpensive.
+						\end{description}
+					\end{indentparagraph}
+				\subsubsection{ROM}
+					\begin{definition}{Read-Only Memory (ROM)}
+						Like RAM, data can be accessed randomly. Unlike RAM, ROM can only be read from, it cannot be written to. ROM is \concept{nonvolatile}: the information is \emph{not} lost if the computer is powered down.
+					\end{definition}
+					Variations of ROM include \concept{PROM}, \concept{EPROM}, and \concept{EEPROM}.
+					\begin{indentparagraph}
+						\begin{description}
+							\item[PROM (Programmable Read-Only Memory)] Memory is blank when the computer is shipped. The user uses special equipment to store programs on it. Once a program is stored, it cannot be overwritten.
+							\item[EPROM (Erasable Programmble Read-Only Memory)] A variation of \concept{PROM}, where the user can store programs in the same way as PROM. Programs can be erased using a special device that applies \concept{ultraviolet light}. However, the EPROM needs to be physically removed.
+							\item[EEPROM (Electrically Erasable Programmable Read-Only Memory)] A variation of \concept{EPROM} that uses electronic impulses to program and erase data. Does \emph{not} need to be physically removed. 
+						\end{description}
+					\end{indentparagraph}
+			\pagebreak
+			\subsection{Memory Heirarchy}
+				\begin{center}
+					\begin{tikzpicture}[scale=0.8]
+						\coordinate (A) at (-5,0) {};
+						\path (A) +(-0.5cm,0) coordinate (A1);
+						\coordinate (B) at (5,0) {};
+						\path (B) +(0.5cm,0) coordinate (B1);
+						\coordinate (C) at (0,7) {};
+						\path (C) +(-0.5cm,0) coordinate (C1);
+						\path (C) +(0.5cm,0) coordinate (C2);
+						\draw[name path=AC] (A) -- (C);
+						\draw[name path=BC] (B) -- (C);
+						\draw[<->] (A1) -- (C1) node[midway,above, sloped] {cost};
+						\draw[<->] (B1) -- (C2) node[midway,above, sloped] {speed};
+						\foreach \y/\A in {0/Main memory,2/Cache memory,4/Registers} {
+							\path[name path=horiz] (A|-0,\y) -- (B|-0,\y);
+							\draw[name intersections={of=AC and horiz,by=P},
+										name intersections={of=BC and horiz,by=Q}] (P) -- (Q)
+									node[midway,above] {\A};
+					}
+					\end{tikzpicture}
+				\end{center}
+				\begin{itemize}
+					\item Use a small amount of costly high-speed memory where speed is crucial.
+					\item Use a moderate amount of medium-speed memory to store data that is accessed often.
+					\item Use a large amount of low-speed memory for data that is accessed less often.
+				\end{itemize}
+			\subsection{Cache Memory}
+				\begin{definition}{Cache Memory}
+					Memory that is faster than main memory, but slower than the CPU and its registers. Placed between the CPU and main memory. Contains a copy of a portion of main memory.
+				\end{definition}
+				\begin{enumerate}
+					\item CPU checks the cache.
+					\item If the word is there, it copies the word. Otherwise, the CPU accesses main memory, and copies a block of memory starting with the desired word. This block replaces the previous contents of cache memory.
+					\item The CPU accesses the cache and copies the word.
+				\end{enumerate}
+		\pagebreak
+		\section{Input/Output Subsystem}
+			\begin{definition}{Input/Output (IO) Subsystem}
+				Allows a computer to communicate with external information, and store programs and data even when the power is off. There are two types: \concept{nonstorage} and \concept{storage} devices.
+			\end{definition}
+			\subsection{Nonstorage Devices}
+				\begin{definition}{Nonstorage device}
+					A device that allows the CPU/memory to communicate with the outside world, but cannot store information.
+				\end{definition}
+				Examples of nonstorage devices:
+				\begin{itemize}
+					\item Keyboard (and other input devices)
+					\item Monitor
+					\item Printer
+				\end{itemize}
+			\subsection{Storage Devices}
+				\begin{definition}{Storage device}
+					A device that can store large amounts of information to be retrieved at a later stage. Cheaper than main memory. Their contents are \concept{nonvolatile}. They can also be referred to as \concept{auxilary storage devices}.
+				\end{definition}
+				These devices can be categorised as either \concept{magnetic}, or \concept{optical}.
+				\subsubsection{Magnetic Storage Devices}
+					\begin{definition}{Magnetic Storage Device}
+						A device that uses magnetization to store bits of data. If a location is magnetized, it represents $1$, if it is not magentized, it represents $0$.
+					\end{definition}
+					Examples of magnetic storage devices:
+					\begin{indentparagraph}
+						\begin{description}
+							\item[Magnetic Disk] One or more disks stacked on top of each other. Each disk is coated with a thin magnetic film. Information is stored and retrieved from the surface of the disk using a read/write head for each magentized surface of the disk.
+								\begin{description}
+									\item[Surface organization] Each surface on the disk is divided into \concept{tracks}, and each track is divided into \concept{sectors}. The tracks are separated by an \concept{intertrack gap}, and the sectors are divided by an \concept{intersector gap}.
+									\item[Data access] This is a \concept{random access device} --- data can be accessed randomly without needing to access all other data located before it. The smallest storage area that can be accessed is a sector.
+									\item[Performance] This depends on several factors, including the \concept{rotational speed} (how fast the disk is spinning), the \concept{seek time} (the time to move the read/write head to the desired track), and the \concept{transfer time} (the time to move data from the disk to the CPU/memory).
+								\end{description}
+							\item[Magnetic Tape] Tapes are mounted on two reels, and use a read/write head that reads or writes information when the tape is passed through it.
+								\begin{description}
+									\item[Surface organization] The width of the tape is divided into nine \concept{tracks}, each location on a track storing $1$ bit of information. Nine vertical locations can store $8$ bits of information related to a byte, plus a bit for error detection.
+									\item[Data access] This is a \concept{sequential access device} --- data can only be accessed by passing through all the data located before it.
+									\item[Performance] Slower than a magnetic disk, but cheaper. Often used to back up large amounts of data.  
+								\end{description}
+						\end{description}
+					\end{indentparagraph}
+				\subsubsection{Optical Storage Devices}
+					\begin{definition}{Optical Storage Device}
+						A device that uses laser light to store and retrieve data. Relatively recent. Followed the invention of the \concept{compact disk (CD)} to store audio information. 
+					\end{definition}
+					Examples of optical storage devices:
+					\begin{indentparagraph}
+						\begin{description}
+							\item[CD-ROM (Compact disk read-only memory)] Same technology as the audio CD, developed by Phillips and Sony for recording music. Only difference is: a CD-ROM is more robust and checks for errors.
+								\begin{description}
+									\item[Creation] Three steps are used to create a large number of disks.
+										\begin{enumerate}[label=\alph*, nosep]
+											\item A \concept{master disk} is created using a high-power infrared laser that creates bit patterns on coated plastic. The laser translates the bit patterns into \concept{pits} (holes, normally represent $0$), and \concept{lands} (no holes, normally represent $1$).
+											\item From the master disk, a mold is made. In the mold, the \concept{pits} are replaced by bumps.
+											\item Molten \concept{polycarbonate resin} is injected into the mold to produce the same pits as the master disk. A thin layer of aliminium is added to the polycarbonate to produce a reflective surface. A protective layer of lacquer is applied, and a label is added. 
+										\end{enumerate}
+									\item[Reading] The CD-ROM is read using a low-power laser beam. The beam is reflected by the aliminium surface when passing through a \concept{land}, and reflected twice when encountering a \concept{pit}. The two reflections have a destructive effect, so less light is reflected.
+									\item[Format] Different from the magnetic disk.
+										\begin{itemize}[nosep]
+											\item A block of $8$-bit data transformed into a $14$-bit \concept{symbol} using an error-correction method called \concept{Hamming code}.
+											\item A \concept{frame} made up from $42$ symbols.
+											\item A \concept{sector} made up from $98$ frames ($2352$ bytes).
+										\end{itemize}
+									\pagebreak
+									\item[Speed] These drives come in different speeds, which are referred to as $1$x, $2$x, and so on.
+										\begin{center}
+											\begin{tabular}{lrl}
+												Speed & Data rate & Approximation\\
+												\midrule
+												$1$x  & $153\,600$ bytes per second    & $150$ kB/s\\
+												$2$x  & $307\,200$ bytes per second    & $300$ kB/s\\
+												$4$x  & $614\,400$ bytes per second    & $600$ kB/s\\
+												$6$x  & $921\,600$ bytes per second    & $900$ kB/s\\
+												$8$x  & $1\,228\,800$ bytes per second & $1.2$ MB/s\\
+												$12$x & $1\,843\,200$ bytes per second & $1.8$ MB/s\\
+												$16$x & $2\,457\,600$ bytes per second & $2.4$ MB/s\\
+												$24$x & $3\,688\,400$ bytes per second & $3.6$ MB/s\\
+												$32$x & $4\,915\,200$ bytes per second & $4.8$ MB/s\\
+												$40$x & $6\,144\,000$ bytes per second & $6$ MB/s
+											\end{tabular}
+										\end{center}
+									\item[Application] Economical if the disks are mass produced. 
+								\end{description}
+							\item[CD-R (Compact Disk Recordable)] Users can create one or more disks without needing to go through the expense involved in making CD-ROMs. Can be written to once, but can be read many times. This is called \concept{write once, read many (WORM)}.
+								\begin{description}
+									\item[Creation] Uses the same principles as CD-ROM, but
+										\begin{enumerate}[label=\alph*, nosep]
+											\item There is no master disk or mold
+											\item The reflective layer is made of gold instead of aliminium
+											\item There are no physical pits in the polycarbonate: the pits and lands are simulated. This is done by adding an extra layer of dye between the reflective material and the polycarbonate.
+											\item A high-power laser beam makes a dark spot in the dye, changing the chemical composition, which simulates a pit. The areas not struck simulate lands.
+										\end{enumerate} 
+									\item[Reading] Can be read by a CD-ROM or CD drive.
+									\item[Format] Format, capacity and speed are the same as CD-ROMs.
+									\item[Application] Useful for creation and distribution of a small number of disks, as well as backups.
+								\end{description}
+							\item[CD-RW (Compact Disk Rewritable)] As CD-Rs can only be written to once, this technology was developed. Also called \concept{erasable optical disk}. It allows contents to be written and read from the disk multiple times.
+								\begin{description}
+									\item[Creation] Uses the same principles as CD-R, but
+										\begin{enumerate}[label=\alph*, nosep]
+											\item Instead of dye, an alloy of silver, indium, antimony and telurium is used. This alloy has two stable states: \concept{crystalline} (transparent) and \concept{amorphous} (nontransparent).
+											\item High-power lasers are uses to create simulated pits in the alloy. A simulated pit is amorphous, a land is crystalline.
+										\end{enumerate}
+									\item[Reading] Uses the same low-power laser beam that CD-ROM and CD-R use.
+									\item[Erasing] A medium-power laser beam changes pits to lands, from amorphous to crystalline.
+									\item[Format] Format, capacity and speed are the same as CD-ROMs and CD-Rs.
+									\item[Application] More expensive than CD-Rs. It can be preferable to use a CD-R instead of a CD-RW if the data on the disk must not be changed.
+								\end{description}
+							\pagebreak
+							\item[DVD (Digital Versatile Disk)] Improved storage quality over CDs. Uses similat technology to CD-ROM, except
+								\begin{enumerate}[label=\alph*, nosep]
+									\item The pits are smaller: $0.4$ microns instead of $0.8$ used in CDs.
+									\item The tracks are closer to each other.
+									\item The beam is a red laser instead of infrared.
+									\item DVDs use one to two recording layers, and can be single-sided or double-sided.
+								\end{enumerate}
+								\begin{description}
+									\item[Capacity] These changes result in higher capacities:
+										\begin{center}
+											\begin{tabular}{ll}
+												Feature & Capacity\\
+												\midrule
+												Single-sided, single-layer & $4.7$ GB\\
+												Single-sided, dual-layer & $8.5$ GB\\
+												Double-sided, single-later & $9.4$ GB\\
+												Double-sided, dual-layer & $17$ GB
+											\end{tabular}
+										\end{center}
+									\item[Compression] Uses MPEG for compression.
+									\item[Application] Many applications that need to store a high volume of data.
+								\end{description}
+						\end{description}
+					\end{indentparagraph}
+		\section{Subsystem Interconnection}
+			\subsection{Connecting CPU and Memory}
+				The CPU and memory are connected by three groups of connections, each called a \concept{bus}: data bus, address bus, and control bus.
+					\begin{definition}{Data Bus}
+						Made of several connections, each carrying $1$ bit at a time. The number of connections is dependent on the size of the word used by the computer.
+					\end{definition}
+					\begin{definition}{Address Bus}
+						Allows access to a particular word in memory. The number of connrections depends on the address space of the memory. If the memory has $2^{n}$ words, the address bus needs to carry $n$ bits at a time, so must have $n$ connections.
+					\end{definition}
+					\begin{definition}{Control Bus}
+						Carries communication between the CPU and memory. The number of connections is dependent on the total number of control commands a computer needs.
+					\end{definition}
+			\pagebreak
+			\subsection{Connecting I/O Devices}
+				I/O devices are attached to the buses through \concept{input/output controllers} or interfaces. There is one specific controller for each I/O device.
+				\subsubsection{Controllers}
+					\begin{definition}{Controller}
+						Bridge the gap between the nature of the I/O device, the CPU, and memory. Can be either \concept{serial} or \concept{parallel}.
+						\begin{indentparagraph}
+							\begin{description}
+								\item[Serial Controller] Has only one data wire
+								\item[Parallel Controller] Has several data connections, so several bits can be transferred at once.
+							\end{description}
+						\end{indentparagraph}
+					\end{definition}
+					Some examples of controllers are:
+					\begin{indentparagraph}
+						\begin{description}
+							\item[SCSI (Small Computer System Interface)] First developed for Macintosh computers in $1984$. A parallel interface with $8$, $16$, or $32$ connections. Provides a \concept{daisy-chained connection}. Both ends of the chain must be connected to a special device called a \concept{terminator}, and each device must have a unique address.
+							\item[FireWire] Defined by IEEE standard $1394$. A high-speed serial interface that transfers data in packets, achieving a transfer rate of up to $50$ MB/s. Can connect up to $63$ devices in a daisy chain or a tree connection. No need for termination.
+							\item[USB (Universal Serial Bus)] Competitor for FireWire. A serial controller than connects both low and high speed devices to the computer bus.
+								\begin{itemize}
+									\item Multiple devices can be connected to a USB controller, which ic also called a \concept{root hub}. USB-$2$ allows up to $127$ devices to be connected in a tree-like structure. The controller is the root of the tree, different \concept{hubs} work as intermediate nodes, and the devices are the end nodes.
+									\item Devices can be removed or attached without powering down the computer. This is called \concept{hot-swappable}.
+									\item Use a cable with $4$ wires. $2$ wires are used to provide power for low power devices. The other $2$ wires, which are twisted together to reduce noise, are used to carry data, addresses, and control signals.
+									\item USB-2 provides different data transfer rates: $1.5$ Mbps (megabits per second), $12$ Mbps, and $480$ Mbps.
+									\item Data is transferred over USB in \concept{packets}. Each packet contains an address part, a control part, and part of the data to be transmitted to the device.
+								\end{itemize}
+							\item[HDMI (High-Definition Multimedia Interface)] Digital replacement for existing analogue video standards. Used to transfer digital video or audio data from a source to a compatible display device.
+						\end{description}
+					\end{indentparagraph}
+				\subsubsection{Addressing Input/Output Devices}
+					There are two methods for handling the addressing of I/O devices: \concept{isolated I/O} and \concept{memory-mapped I/O}.
+					\begin{definition}{Isolated I/O}
+						Instructions used to read/write memory are totally different than the instructions used to read/write I/O devices. Each I/O device has its own address. The I/O addresses can overlap with the memory addresses without ambiguity, as the instructions are different.
+						\begin{description}
+							\item[Advantages] Lack of ambiguity regarding instructions.
+							\item[Disadvantages] A larger number of unique instructions are needed in the CPU.
+						\end{description}
+					\end{definition}
+					\begin{definition}{Memory-Mapped I/O}
+						The CPU treats each register in the I/O controller as a word in memory. There are no separate instructions for transferring data from memory, and transferring data from I/O devices.
+						\begin{description}
+							\item[Advantages] A smaller number of unique instructions is needed.
+							\item[Disadvantages] Part of the memory address space is allocation to registers in I/O controllers.
+						\end{description}
+					\end{definition}
+			\section{Program Execution}
+				A set of instructions called a \concept{program} is used to process data. Both the program and the data for the program are stored in memory.
+				\subsection{Machine Cycle}
+					\begin{definition}{Machine Cycle}
+						A cycle that is repeated by the CPU, in order to execute instructions from a program.
+					\end{definition}
+					Contains three phases:
+					\begin{enumerate}[nosep]
+						\item fetch
+						\item decode
+						\item execute
+					\end{enumerate}
+					\begin{description}
+						\item[Fetch] Control unit orders the system to copy the next instructions into the instruction register of the CPU. The \concept{program counter} holds the address of the instruction to be copied, and is incremented once the instruction is copied.
+						\item[Decode] Translate the instruction into binary code for some operation that the computer must perform.
+						\item[Execute] Control unit sends the decoded task to a component in the CPU.  
+					\end{description}
+				\pagebreak
+				\subsection{Input/Output Operation}
+					Commands are required to transfer data from I/O devices to the CPU and memory. As these devices operate at slower speeds, there needs to be a way to synchronise the operation of the CPU with the operation of the device. There are three methods:
+					\begin{enumerate}[nosep]
+						\item Programmed I/O
+						\item Interrupt-Driven I/O
+						\item Direct Memory Access
+					\end{enumerate}
+					\begin{definition}{Programmed I/O}
+						The CPU waits for the I/O device. When the CPU encounters an I/O instruction, it does nothing else until the data transfer is complete. The CPU constantly checks the status of the IO device.
+						\begin{description}
+							\item[Issue:] CPU time is wasted by checking the status of the I/O for each unit of data to be transferred.
+						\end{description}
+						Data is tranferred to memory after the input operation, and transferred from memory before the output operation.
+					\end{definition}
+					\begin{definition}{Interrupt-Driven I/O}
+						CPU informs the I/O device that a transfer is going to happen. CPU \emph{does not} continuously test the status of the I/O device. The I/O device informs the CPU when it is ready.
+						\par Data is tranferred to memory after the input operation, and transferred from memory before the output operation.
+					\end{definition}
+					\begin{definition}{Direct Memory Access (DMA)}
+						Transfers a large of block of data between a high-speed I/O device, and memory directly, without passing it through the CPU. Requires a \concept{DMA controller} that relieves the CPU of some of its functions. Ther controller has registers to hold blocks of data before and after memory transfer.
+						\begin{enumerate}
+							\item The CPU sends a message to the DMA. The message contains the type of transfer, the beginning addresses of the memory location, and the number of bytes to be transferred.
+							\item The DMA controller (when ready) informs the CPU that it needs to take control of the buses. The CPU stops using the buses, and the controller uses them.
+							\item After data transfer, the CPU continues normal operation.
+						\end{enumerate}
+						\begin{description}
+							\item[Issue:] The CPU is idle for a time. This duration is short, though, as it is only during the transfer itself --- not while the data is being prepared.
+						\end{description}
+					\end{definition}
+				\pagebreak
+			\section{Different Architectures}
+				\begin{definition}{Complex Instruction Set Computer (CISC)}
+					Have a large set of instructions, including complex ones.
+
+					Easier to program for than other architectures, because there is a single instruction for both simple and complex tasks. Multiple instructions don't need to be written for a complex task.
+
+					The circuity of the CPU and control unit is very complicated. To simplify this, programming is done on two levels. The CPU only performs simple operations, called \concept{microoperations}. A complex instruction is transformed into a set of these simple operations, and then executed by the CPU. The instructions for each complex instruction are held in a special memory called \concept{micromemory}. The type of programming that uses this is called \concept{microprogramming}.
+
+					\begin{description}
+						\item[Issue] The overhead associated with microprogramming and access to micromemory.
+						\item[Example] Intel Pentium series
+					\end{description}
+				\end{definition}
+				\begin{definition}{Reduced Instruction Set Computer (RISC)}
+					Have a small set of instructions that do a minimum number of simple operations.
+
+					Complex operations are simulated using a subset of simple operations. Because of this, programming is more difficult and time-consuming.
+				\end{definition}
+
+		\rulechapterend
+
+\end{document}
