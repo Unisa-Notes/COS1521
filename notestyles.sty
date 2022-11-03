@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notestyles}[2022/09/27 Kayzels Notes Styles]
+\ProvidesPackage{notestyles}[2022/11/03 Kayzels Notes Styles]
 
 % Maths
 \RequirePackage{amssymb}
@@ -93,6 +93,10 @@
 % Indented Paragraphs
 \RequirePackage{changepage}
 \newenvironment{indentparagraph}{\begin{adjustwidth}{2em}{}}{\end{adjustwidth}}
+
+% Code - using listings instead of minted due to output path
+\RequirePackage{listings}
+\lstset{basicstyle=\ttfamily}
 
 % Images
 \RequirePackage{graphicx}
