@@ -135,6 +135,7 @@
 	\newcounter{oldchapter}
 	\setcounter{oldchapter}{\value{chapter}}
 	\setcounter{chapter}{4}
+	\renewcommand{\theHchapter}{E\Alph{chapter}}
 	\renewcommand{\thechapter}{\Alph{chapter}}
 	\chapter{Boolean Algebra and Logic Circuits}
 		\label{ch:boolean}
@@ -527,5 +528,6 @@
 
 	\setcounter{chapter}{\value{oldchapter}}
 	\renewcommand{\thechapter}{\arabic{chapter}}
+	\renewcommand{\theHchapter}{\arabic{chapter}}
 
 \end{document}
