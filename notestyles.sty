@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notestyles}[2022/11/03 Kayzels Notes Styles]
+\ProvidesPackage{notestyles}[2022/11/05 Kayzels Notes Styles]
 
 % Maths
 \RequirePackage{amssymb}
@@ -60,6 +60,9 @@
 % Tables
 \RequirePackage{tabularray}
 \UseTblrLibrary{booktabs}
+\UseTblrLibrary{varwidth}
+\SetTblrInner[tblr]{measure=vbox}
+\newcommand{\nl}{\\}
 
 % Color Boxes
 \RequirePackage{parskip}
